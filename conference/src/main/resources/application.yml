@@ -1,0 +1,8 @@
+spring:
+  application:
+  name: conference
+  datasource:
+    url: jdbc:mysql://localhost:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    password: conference123!!
+    username: conference
+    driver-class-name: com.mysql.cj.jdbc.Driver
