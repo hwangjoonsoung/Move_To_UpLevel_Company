@@ -6,8 +6,8 @@ create table Registration
     price           int         null,
     amount          int         null,
     pay_method      varchar(10) null,
-    trade_number    int         null,
-    order_number    int         null,
+    trade_id    varchar(20)         null,
+    order_id     varchar(20)         null,
     date_of_payment datetime    null,
     pay_status      tinyint(1)  null,
     name            varchar(30) null,
@@ -18,7 +18,7 @@ create table Registration
     registered      tinyint(1)  null,
     date_of_regist  datetime    null,
     date_of_create  datetime    null,
-    member_id       int         null
+    member_id       int(20)         null
 );
 
 create table data_edit_log
