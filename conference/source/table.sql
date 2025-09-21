@@ -45,9 +45,9 @@ create table fee_item
     id     int auto_increment
         primary key,
     fee_id int         not null,
-    Field  int         null,
-    Field2 varchar(10) null,
-    Field3 tinyint(1)  null,
+    price  int         null,
+    member_type varchar(10) null,
+    is_member tinyint(1)  null,
     constraint FK_fee_TO_fee_item_1
         foreign key (fee_id) references fee (id)
 );

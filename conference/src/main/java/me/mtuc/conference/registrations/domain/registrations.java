@@ -59,7 +59,7 @@ public class registrations {
     private boolean registered = false;
 
     private LocalDateTime date_of_regist ;
-    private LocalDateTime date_of_create = LocalDate.now();
+    private LocalDateTime date_of_create = LocalDateTime.now();
 
     @Column(nullable = false, length = 20)
     private String member_id;
