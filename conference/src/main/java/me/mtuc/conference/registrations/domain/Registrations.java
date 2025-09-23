@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class registrations {
+public class Registrations {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +23,10 @@ public class registrations {
 
     @Column(nullable = false, length = 50)
     private String good_name;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fee_items_id")
+    private FeeItems feeItems;
 
     @Column(nullable = false, length = 50)
     private int price = 0;
