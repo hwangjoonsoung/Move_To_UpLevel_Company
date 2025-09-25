@@ -21,7 +21,7 @@ public class Fees {
     private String name;
 
     @Lob
-    private String memo;
+    private String description;
 
     @OneToMany(mappedBy = "fees" , cascade = CascadeType.ALL , orphanRemoval = true)
     private List<FeeItems> feeItems = new ArrayList<>();

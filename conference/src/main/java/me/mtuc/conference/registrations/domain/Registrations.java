@@ -21,8 +21,8 @@ public class Registrations {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
-    private String good_name;
+    @Column(name = "good_name", nullable = false, length = 50)
+    private String goodName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fee_items_id")
@@ -33,20 +33,20 @@ public class Registrations {
     @Column(nullable = false, length = 50)
     private int amount = 0;
 
-    @Column(nullable = true, length = 20)
+    @Column(name = "pay_method", nullable = true, length = 20)
     @Enumerated(EnumType.STRING)
-    private PayMethod pay_method;
+    private PayMethod payMethod;
 
-    @Column(nullable = false, length = 20)
-    private boolean pay_status = false;
+    @Column(name = "pay_status", nullable = false, length = 20)
+    private boolean payStatus = false;
 
-    @Column(nullable = false, length = 20)
-    private String trade_id;
-    @Column(nullable = false, length = 20)
-    private String order_id;
+    @Column(name = "trade_id", nullable = false, length = 20)
+    private String tradeId;
+    @Column(name= "order_id", nullable = false, length = 20)
+    private String orderId;
 
-    @Column(nullable = true)
-    private LocalDateTime date_of_payment;
+    @Column(name = "date_id_payment")
+    private LocalDateTime dateOfPayment;
 
     @Column(nullable = false, length = 30)
     private String name;
@@ -62,7 +62,9 @@ public class Registrations {
     @Column(nullable = false, length = 1)
     private boolean registered = false;
 
+    @Column(name = "date_of_regist")
     private LocalDateTime date_of_regist ;
+    @Column(name = "date_of_create", nullable = false)
     private LocalDateTime date_of_create = LocalDateTime.now();
 
     @Column(nullable = false, length = 20)

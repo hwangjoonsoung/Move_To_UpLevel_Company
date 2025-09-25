@@ -26,11 +26,11 @@ public class FeeItems {
     @Column(nullable = false)
     private int price;
 
-    @Column(nullable = false, length = 10)
-    private String member_type;
+    @Column(name = "member_type", nullable = false, length = 10)
+    private String memberType;
 
-    @Column(nullable = false, length = 1)
-    private boolean is_member = false;
+    @Column(name = "is_member", nullable = false, length = 1)
+    private boolean isMember = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fees_id")
