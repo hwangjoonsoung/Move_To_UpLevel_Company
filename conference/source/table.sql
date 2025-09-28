@@ -55,6 +55,7 @@ create table Registrations
     date_of_payment datetime    null,
     pay_status      tinyint(1)  null,
     name            varchar(30) null,
+    birth           date null,
     affiliation     varchar(50) null,
     position        varchar(50) null,
     email           varchar(50) null,
@@ -62,7 +63,7 @@ create table Registrations
     registered      tinyint(1)  null,
     date_of_regist  datetime    null,
     date_of_create  datetime    null,
-    member_id       int(20)         null
+    member_id       int(10)         null
 );
 
 

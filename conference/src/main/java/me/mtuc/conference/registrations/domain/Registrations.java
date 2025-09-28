@@ -8,6 +8,7 @@ import lombok.Setter;
 import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -40,16 +41,18 @@ public class Registrations {
     @Column(name = "pay_status", nullable = false, length = 20)
     private boolean payStatus = false;
 
-    @Column(name = "trade_id", nullable = false, length = 20)
+    @Column(name = "trade_id", nullable = true, length = 20)
     private String tradeId;
-    @Column(name= "order_id", nullable = false, length = 20)
+    @Column(name= "order_id", nullable = true, length = 20)
     private String orderId;
 
-    @Column(name = "date_id_payment")
+    @Column(name = "date_id_payment", nullable = true)
     private LocalDateTime dateOfPayment;
 
     @Column(nullable = false, length = 30)
     private String name;
+    @Column(nullable = false, length = 30)
+    private LocalDate birth;
     @Column(nullable = false, length = 50)
     private String affiliation;
     @Column(nullable = false, length = 50)
@@ -67,6 +70,6 @@ public class Registrations {
     @Column(name = "date_of_create", nullable = false)
     private LocalDateTime date_of_create = LocalDateTime.now();
 
-    @Column(nullable = false, length = 20)
-    private String member_id;
+    @Column(nullable = false, length = 10)
+    private int member_id = 0;
 }
