@@ -1,10 +1,7 @@
 package me.mtuc.conference.registrations.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
 
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Registrations {
 
     @Id

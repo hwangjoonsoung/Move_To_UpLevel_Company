@@ -13,7 +13,7 @@ public class RegistrationRequestDto {
 
     private String goodName;
     private Long feeItemId;
-    private Long price;
+    private int price;
     private String name;
     private LocalDate birth;
     private String affiliation;

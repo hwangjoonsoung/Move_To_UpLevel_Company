@@ -20,4 +20,4 @@ spring:
     defer-datasource-initialization: true
   sql:
     init:
-      data-locations: classpath:sql/default.sql
+      data-locations: classpath:sql/default.sql #시작하면 sql query 동작할 수 있도록
