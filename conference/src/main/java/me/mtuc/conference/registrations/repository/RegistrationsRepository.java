@@ -11,8 +11,18 @@ public class RegistrationsRepository {
 
     private final EntityManager entityManager;
 
-
     public void newRepository(Registrations registrations) {
         entityManager.persist(registrations);
     }
+
+    public Registrations findRegistrations(Long id) {
+        return entityManager.find(Registrations.class, id);
+    }
+
+    public void editRegistration(Registrations registrations) {
+        entityManager.merge(registrations);
+    }
+
+    
+
 }

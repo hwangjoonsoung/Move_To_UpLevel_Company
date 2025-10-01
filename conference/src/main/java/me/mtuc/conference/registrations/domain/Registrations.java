@@ -68,6 +68,9 @@ public class Registrations {
     @Column(name = "date_of_create", nullable = false)
     private LocalDateTime date_of_create = LocalDateTime.now();
 
+    @Column(name = "is_deleted", length = 1)
+    private boolean is_deleted = false;
+
     @Column(nullable = false, length = 10)
     private int member_id = 0;
 }

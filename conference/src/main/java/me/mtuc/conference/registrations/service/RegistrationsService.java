@@ -21,7 +21,7 @@ public class RegistrationsService {
 
         Registrations registrations = Registrations.builder()
                 .goodName(registrationRequestDto.getGoodName())
-                .feeItems(commonRepository.findFeeItem(registrationRequestDto.getFeeItemId())) //repository에서 feeitemid를 찾아서 넣ㅇ줘야 함
+                .feeItems(commonRepository.findFeeItem(registrationRequestDto.getFeeItemId()))
                 .price(registrationRequestDto.getPrice())
                 .name(registrationRequestDto.getName())
                 .birth(registrationRequestDto.getBirth())
@@ -33,5 +33,30 @@ public class RegistrationsService {
         // todo: repository에서 영속
         registrationsRepository.newRepository(registrations);
         return id;
+    }
+
+    public void editRegistrations(Long id,RegistrationRequestDto registrationRequestDto) {
+
+        Registrations registrations = registrationsRepository.findRegistrations(id);
+        registrations.builder()
+                .goodName(registrationRequestDto.getGoodName())
+                .feeItems(commonRepository.findFeeItem(registrationRequestDto.getFeeItemId()))
+                .price(registrationRequestDto.getPrice())
+                .name(registrationRequestDto.getName())
+                .birth(registrationRequestDto.getBirth())
+                .affiliation(registrationRequestDto.getAffiliation())
+                .position(registrationRequestDto.getPosition())
+                .email(registrationRequestDto.getEmail())
+                .phone(registrationRequestDto.getPhone()).build();
+        registrationsRepository.editRegistration(registrations);
+
+    }
+
+    public void removeRegistration(Long id) {
+
+        Registrations registrations = registrationsRepository.findRegistrations(id);
+        registrations.set_deleted(true);
+        registrationsRepository.editRegistration(registrations);
+
     }
 }

@@ -63,6 +63,7 @@ create table Registrations
     registered      tinyint(1)  null,
     date_of_regist  datetime    null,
     date_of_create  datetime    null,
+    is_deleted  tinyint(1)    default '0',
     member_id       int(10)         null
 );
 
