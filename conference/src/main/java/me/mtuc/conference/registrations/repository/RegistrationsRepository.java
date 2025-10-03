@@ -19,10 +19,9 @@ public class RegistrationsRepository {
         return entityManager.find(Registrations.class, id);
     }
 
-    public void editRegistration(Registrations registrations) {
-        entityManager.merge(registrations);
+    public Registrations editRegistration(Registrations registrations) {
+        Registrations mergedRegistrations = entityManager.merge(registrations);
+        return mergedRegistrations;
     }
-
-    
 
 }

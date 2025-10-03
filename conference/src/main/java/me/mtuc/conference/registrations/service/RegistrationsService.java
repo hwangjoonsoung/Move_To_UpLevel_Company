@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.common.repository.CommonRepository;
 import me.mtuc.conference.registrations.domain.Registrations;
 import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
+import me.mtuc.conference.registrations.dto.RegistrationsEditResponseDto;
 import me.mtuc.conference.registrations.repository.RegistrationsRepository;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class RegistrationsService {
         return id;
     }
 
-    public void editRegistrations(Long id,RegistrationRequestDto registrationRequestDto) {
+    public Long editRegistrations(Long id,RegistrationRequestDto registrationRequestDto) {
 
         Registrations registrations = registrationsRepository.findRegistrations(id);
         registrations.builder()
@@ -48,15 +49,21 @@ public class RegistrationsService {
                 .position(registrationRequestDto.getPosition())
                 .email(registrationRequestDto.getEmail())
                 .phone(registrationRequestDto.getPhone()).build();
-        registrationsRepository.editRegistration(registrations);
-
+        Registrations editedRegistration = registrationsRepository.editRegistration(registrations);
+        return editedRegistration.getId();
     }
 
-    public void removeRegistration(Long id) {
+    public Long removeRegistration(Long id) {
 
         Registrations registrations = registrationsRepository.findRegistrations(id);
         registrations.set_deleted(true);
-        registrationsRepository.editRegistration(registrations);
+        Registrations editedRegistration = registrationsRepository.editRegistration(registrations);
+        return editedRegistration.getId();
+    }
 
+    public RegistrationsEditResponseDto getRegistrations(Long id) {
+        Registrations registrations = registrationsRepository.findRegistrations(id);
+        RegistrationsEditResponseDto registrationsEditResponseDto = new RegistrationsEditResponseDto(registrations.getName(), registrations.getBirth(), registrations.getAffiliation(), registrations.getPosition(), registrations.getEmail(), registrations.getPhone(), registrations.getFeeItems().getId());
+        return registrationsEditResponseDto;
     }
 }
