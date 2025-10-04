@@ -27,7 +27,7 @@ public class RegistrationsController {
         return "/registrations/edit";
     }
 
-    @GetMapping("/registrations/{id}}")
+    @GetMapping("/registrations/{id}")
     public String showRegistrations(@PathVariable(name = "id") Long id) {
         registrationsService.getRegistrations(id);
         return "/registrations/edit";
