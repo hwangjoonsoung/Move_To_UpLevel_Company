@@ -29,14 +29,14 @@ public class RegistrationsRestController {
 
     @PostMapping(value = "/registrations/{id}/edit", consumes = "application/json", produces = "application/json")
     public ResponseEntity<RegistrationsIdResponseDto> editRegistrations(@PathVariable(name = "id") Long id, @Valid @RequestBody RegistrationRequestDto registrationRequestDto) {
-        Long editRegistrationsId = registrationsService.editRegistrations(id, registrationRequestDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new RegistrationsIdResponseDto(editRegistrationsId));
+        registrationsService.editRegistrations(id, registrationRequestDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new RegistrationsIdResponseDto(id));
     }
 
     @PostMapping(value = "/registrations/{id}/remove",consumes = "application/json", produces = "application/json")
     public ResponseEntity<RegistrationsIdResponseDto> removeRegistrations(@PathVariable(name = "id") Long id) {
-        Long removedRegistrationId = registrationsService.removeRegistration(id);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new RegistrationsIdResponseDto(removedRegistrationId));
+        registrationsService.removeRegistration(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new RegistrationsIdResponseDto(id));
     }
 
 }

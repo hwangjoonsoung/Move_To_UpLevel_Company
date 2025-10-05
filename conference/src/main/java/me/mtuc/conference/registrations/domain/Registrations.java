@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
+import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,4 +74,16 @@ public class Registrations {
 
     @Column(nullable = false, length = 10)
     private int member_id = 0;
+
+    public void updateRegistrations(RegistrationRequestDto registrationRequestDto, FeeItems feeItems){
+        this.goodName = registrationRequestDto.getGoodName();
+        this.feeItems = feeItems;
+        this.price = registrationRequestDto.getPrice();
+        this.name = registrationRequestDto.getName();
+        this.birth = registrationRequestDto.getBirth();
+        this.affiliation = registrationRequestDto.getAffiliation();
+        this.position = registrationRequestDto.getPosition();
+        this.email = registrationRequestDto.getEmail();
+        this.phone = registrationRequestDto.getPhone();
+    }
 }
