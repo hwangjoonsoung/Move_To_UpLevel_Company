@@ -14,7 +14,7 @@ public class RegistrationsController {
 
     @GetMapping("/registrations/")
     public String index() {
-        return "/registrations/";
+        return "/registrations/index";
     }
 
     @GetMapping("/registrations/new")

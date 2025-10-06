@@ -1,8 +1,9 @@
 package me.mtuc.conference.registrations.service;
 
 import lombok.RequiredArgsConstructor;
+import me.mtuc.conference.Util;
 import me.mtuc.conference.common.entity.FeeItems;
-import me.mtuc.conference.common.repository.CommonRepository;
+import me.mtuc.conference.common.repository.FeeItemsRepository;
 import me.mtuc.conference.registrations.domain.Registrations;
 import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
 import me.mtuc.conference.registrations.dto.RegistrationsEditResponseDto;
@@ -16,25 +17,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegistrationsService {
 
     private final RegistrationsRepository registrationsRepository;
-    private final CommonRepository commonRepository;
+    private final FeeItemsRepository feeItemsRepository;
 
     @Transactional(readOnly = false)
     public Long newRegistrations(RegistrationRequestDto registrationRequestDto) {
         Long id = 0L;
 
-        FeeItems feeItems = commonRepository.findById(registrationRequestDto.getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
+        FeeItems feeItems = feeItemsRepository.findById(registrationRequestDto.getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
 
         Registrations registrations = Registrations.builder()
                 .goodName(registrationRequestDto.getGoodName())
                 .feeItems(feeItems)
                 .price(registrationRequestDto.getPrice())
                 .name(registrationRequestDto.getName())
-                .birth(registrationRequestDto.getBirth())
+                .birth(Util.stringToLocalDate(registrationRequestDto.getBirth()))
                 .affiliation(registrationRequestDto.getAffiliation())
                 .position(registrationRequestDto.getPosition())
                 .email(registrationRequestDto.getEmail())
                 .phone(registrationRequestDto.getPhone()).build();
-
         registrationsRepository.save(registrations);
         return id;
     }
@@ -43,7 +43,7 @@ public class RegistrationsService {
     public void editRegistrations(Long id,RegistrationRequestDto registrationRequestDto) {
 
         Registrations registrations = registrationsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("사전등록 내역이 없습니다."));
-        FeeItems feeItem = commonRepository.findById(registrationRequestDto.getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
+        FeeItems feeItem = feeItemsRepository.findById(registrationRequestDto.getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
 
         registrations.updateRegistrations(registrationRequestDto,feeItem);
 
@@ -53,7 +53,7 @@ public class RegistrationsService {
     public void removeRegistration(Long id) {
 
         Registrations registrations = registrationsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("사전등록 내역이 없습니다."));
-        registrations.set_deleted(true);
+        registrations.setDeleted(true);
     }
 
     public RegistrationsEditResponseDto getRegistrations(Long id) {

@@ -2,6 +2,7 @@ package me.mtuc.conference.registrations.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.mtuc.conference.Util;
 import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
 import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
@@ -65,25 +66,31 @@ public class Registrations {
     private boolean registered = false;
 
     @Column(name = "date_of_regist")
-    private LocalDateTime date_of_regist ;
+    private LocalDateTime dateOfRegist ;
     @Column(name = "date_of_create", nullable = false)
-    private LocalDateTime date_of_create = LocalDateTime.now();
+    private LocalDateTime dateOfCreate;
 
     @Column(name = "is_deleted", length = 1)
-    private boolean is_deleted = false;
+    private boolean isDeleted = false;
 
     @Column(nullable = false, length = 10)
-    private int member_id = 0;
+    private int memberId = 0;
 
     public void updateRegistrations(RegistrationRequestDto registrationRequestDto, FeeItems feeItems){
         this.goodName = registrationRequestDto.getGoodName();
         this.feeItems = feeItems;
         this.price = registrationRequestDto.getPrice();
         this.name = registrationRequestDto.getName();
-        this.birth = registrationRequestDto.getBirth();
+        this.birth = Util.stringToLocalDate(registrationRequestDto.getBirth());
         this.affiliation = registrationRequestDto.getAffiliation();
         this.position = registrationRequestDto.getPosition();
         this.email = registrationRequestDto.getEmail();
         this.phone = registrationRequestDto.getPhone();
+    }
+
+    @PrePersist
+    public void onPresist(){
+        LocalDateTime now = LocalDateTime.now();
+        this.dateOfCreate = now;
     }
 }

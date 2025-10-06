@@ -29,18 +29,6 @@ create table fee_items
         foreign key (fee_id) references fee (id)
 );
 
-create table registrations_fee_items
-(
-    id     int primary key auto_increment ,
-    fee_item_id int not null,
-    registration_id int not null,
-    primary key (fee_item_id, registration_id),
-    constraint FK_Registration_TO_registrations_fee_item_1
-        foreign key (registration_id) references Registration (id),
-    constraint FK_fee_item_TO_registrations_fee_item_1
-        foreign key (fee_item_id) references fee_item (id)
-);
-
 create table Registrations
 (
     id              int auto_increment
@@ -64,7 +52,7 @@ create table Registrations
     date_of_regist  datetime    null,
     date_of_create  datetime    null,
     is_deleted  tinyint(1)    default '0',
-    member_id       int(10)         null
+    member_id       int(10)         null,
+    constraint FK_fee_item_TO_registrations_1
+        foreign key (fee_item_id) references fee_items (id)
 );
-
-
