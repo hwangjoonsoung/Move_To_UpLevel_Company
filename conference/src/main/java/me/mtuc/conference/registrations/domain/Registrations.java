@@ -67,6 +67,8 @@ public class Registrations {
 
     @Column(name = "date_of_regist")
     private LocalDateTime dateOfRegist ;
+    @Column(name = "date_of_update")
+    private LocalDateTime dateOfUpdate ;
     @Column(name = "date_of_create", nullable = false)
     private LocalDateTime dateOfCreate;
 
@@ -89,8 +91,14 @@ public class Registrations {
     }
 
     @PrePersist
-    public void onPresist(){
+    public void onPersist(){
         LocalDateTime now = LocalDateTime.now();
         this.dateOfCreate = now;
+    }
+
+    @PreUpdate
+    public void updatePersist(){
+        LocalDateTime now = LocalDateTime.now();
+        this.dateOfUpdate = now;
     }
 }

@@ -51,7 +51,6 @@ public class RegistrationsService {
 
     @Transactional(readOnly = false)
     public void removeRegistration(Long id) {
-
         Registrations registrations = registrationsRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("사전등록 내역이 없습니다."));
         registrations.setDeleted(true);
     }
