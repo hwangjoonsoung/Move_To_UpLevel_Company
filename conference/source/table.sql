@@ -1,27 +1,4 @@
-create table Registration
-(
-    id              int auto_increment
-        primary key,
-    good_name       varchar(50) null,
-    price           int         null,
-    amount          int         null,
-    pay_method      varchar(10) null,
-    trade_number    int         null,
-    order_number    int         null,
-    date_of_payment datetime    null,
-    pay_status      tinyint(1)  null,
-    name            varchar(30) null,
-    affiliation     varchar(50) null,
-    position        varchar(50) null,
-    email           varchar(50) null,
-    phone           varchar(30) null,
-    registered      tinyint(1)  null,
-    date_of_regist  datetime    null,
-    date_of_create  datetime    null,
-    member_id       int         null
-);
-
-create table data_edit_log
+create table data_edit_logs
 (
     id              int auto_increment
         primary key,
@@ -32,35 +9,50 @@ create table data_edit_log
     edit_reason     varchar(255) null
 );
 
-create table fee
+create table fees
 (
     id   int auto_increment
         primary key,
     name varchar(50) null,
-    memo text        null
+    description text        null
 );
 
-create table fee_item
+create table fee_items
 (
     id     int auto_increment
         primary key,
     fee_id int         not null,
-    Field  int         null,
-    Field2 varchar(10) null,
-    Field3 tinyint(1)  null,
+    price  int         null,
+    member_type varchar(10) null,
+    is_member tinyint(1)  null,
     constraint FK_fee_TO_fee_item_1
         foreign key (fee_id) references fee (id)
 );
 
-create table registrations_fee_item
+create table Registrations
 (
-    fee_item_id     int not null,
-    registration_id int not null,
-    primary key (fee_item_id, registration_id),
-    constraint FK_Registration_TO_registrations_fee_item_1
-        foreign key (registration_id) references Registration (id),
-    constraint FK_fee_item_TO_registrations_fee_item_1
-        foreign key (fee_item_id) references fee_item (id)
+    id              int auto_increment
+        primary key,
+    good_name       varchar(50) null,
+    fee_item_id       int null,
+    price           int         null,
+    amount          int         null,
+    pay_method      varchar(10) null,
+    trade_id    varchar(20)         null,
+    order_id     varchar(20)         null,
+    date_of_payment datetime    null,
+    pay_status      tinyint(1)  null,
+    name            varchar(30) null,
+    birth           date null,
+    affiliation     varchar(50) null,
+    position        varchar(50) null,
+    email           varchar(50) null,
+    phone           varchar(30) null,
+    registered      tinyint(1)  null,
+    date_of_regist  datetime    null,
+    date_of_create  datetime    null,
+    is_deleted  tinyint(1)    default '0',
+    member_id       int(10)         null,
+    constraint FK_fee_item_TO_registrations_1
+        foreign key (fee_item_id) references fee_items (id)
 );
-
-
