@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import me.mtuc.conference.booth.entity.Booths;
 import me.mtuc.conference.registrations.domain.Registrations;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,4 +38,7 @@ public class FeeItems {
 
     @OneToMany(mappedBy = "feeItems",cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<Registrations> registrations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "feeItems",cascade = CascadeType.ALL ,orphanRemoval = true)
+    private List<Booths> booths = new ArrayList<>();
 }

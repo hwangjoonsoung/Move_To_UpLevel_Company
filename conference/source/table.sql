@@ -56,3 +56,39 @@ create table Registrations
     constraint FK_fee_item_TO_registrations_1
         foreign key (fee_item_id) references fee_items (id)
 );
+
+CREATE TABLE `booth`
+(
+    `id`                   int NOT NULL,
+    `fee_item_id`          int NOT NULL,
+    `company_name`         varchar(50) NULL,
+    `ceo_name`             varchar(50) NULL,
+    `company_phone_number` varchar(30) NULL,
+    `booth_count`          int(1)	NULL,
+    `booth_ids`            varchar(20) NULL,
+    `manager_name`         varchar(30) NULL,
+    `manager_affiliations` varhcar(50)	NULL,
+    `manager_phone_number` varchar(30) NULL,
+    `manager_email`        varchar(50) NULL,
+    `password`             varhcar(50)	NULL,
+    `price`                int(10)	NULL,
+    `payment_status`       tinyint(1)	NULL,
+    `amount`               int(10)	NULL,
+    `payment_method`       varchar(10) NULL,
+    `date_of_payment`      datatime NULL,
+    `date_of_create`      datatime NULL,
+    `date_of_update`      datatime NULL,
+    constraint FK_fee_item_TO_booths_1
+        foreign key (fee_item_id) references fee_items (id)
+);
+
+CREATE TABLE `staff`
+(
+    `id`          int NOT NULL,
+    `booth_id`    int NOT NULL,
+    `name`        varchar(30) NULL,
+    `affiliation` varchar(50) NULL,
+    `position`    varchar(50) NULL,
+    constraint FK_booth_TO_staff_1
+        foreign key (booth_id) references booth (id)
+);

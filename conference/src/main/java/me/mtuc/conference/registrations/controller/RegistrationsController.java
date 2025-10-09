@@ -1,8 +1,10 @@
 package me.mtuc.conference.registrations.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.mtuc.conference.registrations.dto.RegistrationsEditResponseDto;
 import me.mtuc.conference.registrations.service.RegistrationsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -22,8 +24,9 @@ public class RegistrationsController {
         return "/registrations/new";
     }
 
-    @GetMapping("/registrations/edit")
-    public String editRegistrations() {
+    @GetMapping("/registrations/{id}/edit")
+    public String editRegistrations(@PathVariable Long id, Model model) {
+        RegistrationsEditResponseDto registrations = registrationsService.getRegistrations(id);
         return "/registrations/edit";
     }
 

@@ -1,0 +1,94 @@
+package me.mtuc.conference.booth.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import me.mtuc.conference.common.entity.FeeItems;
+
+import java.nio.channels.NonWritableChannelException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+@Entity
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+public class Booths {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fee_items_id")
+    private FeeItems feeItem;
+
+    @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
+    private ArrayList<Staffs> staffs = new ArrayList<>();
+
+    @Column(name = "company_name", length = 50, nullable = false)
+    private String companyName;
+
+    @Column(name = "eco_name", length = 50 , nullable = false)
+    private String ceoName;
+
+    @Column(name = "company_phone_number", length = 30,nullable = false)
+    private String companyPhoneNumber;
+
+    @Column(name = "booth_count", length = 1,nullable = false)
+    private String boothCount;
+
+    @Column(name = "booth_ids",length = 20, nullable = false)
+    private String boothIds;
+
+    @Column(name = "manager_name", length = 30,nullable = false)
+    private String managerName;
+
+    @Column(name = "manager_affiliations",length = 50,nullable = false)
+    private String managerAffiliations;
+
+    @Column(name = "manager_phone_number", length = 30,nullable = false)
+    private String managerPhoneNumber;
+
+    @Column(name = "manager_email",length = 50,nullable = false)
+    private String managerEmail;
+
+    @Column(name = "password" , length = 50,nullable = false)
+    private String password;
+
+    @Column(name = "price",length = 10)
+    private int price = 0;
+
+    @Column(name = "payment_status",length = 1)
+    private boolean paymentStatus = false;
+
+    @Column(name = "amount",length = 10)
+    private int amount = 0;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "payment_method",length = 10)
+    private String paymentMethod;
+
+    @Column(name = "date_of_payment")
+    private LocalDateTime dateOfPayment;
+    @Column(name = "date_of_create", nullable = false)
+    private LocalDateTime dateOfCreate;
+    @Column(name = "date_of_update")
+    private LocalDateTime dateOfUpdate;
+
+    @PrePersist
+    private void onPersist(){
+        this.dateOfCreate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void updatePersist(){
+        this.dateOfUpdate = LocalDateTime.now();
+    }
+
+    private void updateBooth(){
+
+    }
+
+}
