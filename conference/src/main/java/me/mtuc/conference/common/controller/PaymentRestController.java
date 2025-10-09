@@ -14,9 +14,14 @@ public class PaymentRestController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/registrations/{id}")
+    @PostMapping("/registrations/{id}/admin")
+    public void adminPaidRegistrationsFee(@PathVariable(name = "id") Long id) {
+        paymentService.adminPaidRegistrationsFee(id);
+    }
+
+    @PostMapping("/registrations/{id}/pg")
     public void paidRegistrationsFee(@PathVariable(name = "id") Long id) {
-        paymentService.paidRegistrationsFee(id);
+        paymentService.inicisPaidRegistrationsFee(id);
     }
 
     @PostMapping("/booth/{id}")
