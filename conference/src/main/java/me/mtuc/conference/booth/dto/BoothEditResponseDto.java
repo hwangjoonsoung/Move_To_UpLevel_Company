@@ -1,14 +1,13 @@
 package me.mtuc.conference.booth.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-@Builder
-public class BoothEditResponseDto {
-
-
-    
+public record BoothEditResponseDto(
+        String companyName
+        , String ceoName
+        , String companyPhoneNumber
+        , String boothCount
+        , String boothIds
+        , String managerAffiliations
+        , String managerPhoneNumber
+        , String managerEmail
+) {
 }

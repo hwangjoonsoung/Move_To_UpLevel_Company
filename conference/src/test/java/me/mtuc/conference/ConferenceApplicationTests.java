@@ -12,9 +12,6 @@ class ConferenceApplicationTests {
     @Test
     void contextLoads() {
 
-        LocalDate yyyyMMdd = LocalDate.parse("19990909", DateTimeFormatter.ofPattern("yyyyMMdd"));
-        System.out.println(yyyyMMdd);
-
     }
 
 }

@@ -1,6 +1,7 @@
 package me.mtuc.conference.booth.service;
 
 import lombok.RequiredArgsConstructor;
+import me.mtuc.conference.booth.dto.BoothEditResponseDto;
 import me.mtuc.conference.booth.entity.Booths;
 import me.mtuc.conference.booth.repository.BoothRepository;
 import org.springframework.stereotype.Service;
@@ -12,11 +13,18 @@ public class BoothService {
 
     private final BoothRepository boothRepository;
 
-    public Booths findBoothById(Long id) {
+    public BoothEditResponseDto findBoothById(Long id) {
         Booths booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 부스 정보가 없습니다"));
-        // todo: 여기서 boothEditResponseDto를 만드어서 보내야 함.
 
-        return booth;
+        BoothEditResponseDto boothEditResponseDto = new BoothEditResponseDto(booth.getCompanyName(),
+                booth.getCeoName(),
+                booth.getCompanyPhoneNumber(),
+                booth.getBoothCount(),
+                booth.getBoothIds(),
+                booth.getManagerAffiliations(),
+                booth.getManagerPhoneNumber(),
+                booth.getManagerEmail());
+        return boothEditResponseDto;
     }
 
 }

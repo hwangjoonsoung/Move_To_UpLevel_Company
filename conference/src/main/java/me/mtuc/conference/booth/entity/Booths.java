@@ -3,8 +3,8 @@ package me.mtuc.conference.booth.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import me.mtuc.conference.common.entity.FeeItems;
+import me.mtuc.conference.enums.PayMethod;
 
-import java.nio.channels.NonWritableChannelException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class Booths {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fee_items_id")
-    private FeeItems feeItem;
+    private FeeItems feeItems;
 
     @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
     private ArrayList<Staffs> staffs = new ArrayList<>();
@@ -68,7 +68,7 @@ public class Booths {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method",length = 10)
-    private String paymentMethod;
+    private PayMethod paymentMethod;
 
     @Column(name = "date_of_payment")
     private LocalDateTime dateOfPayment;
