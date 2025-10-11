@@ -1,4 +1,4 @@
-package me.mtuc.conference;
+package me.mtuc.conference.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

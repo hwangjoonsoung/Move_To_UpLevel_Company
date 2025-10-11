@@ -1,12 +1,20 @@
 package me.mtuc.conference.booth.dto;
 
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.util.List;
 
 @Setter@Getter@Builder
 public class BoothNewRequestDto {
 
+    @Valid
+    private BoothInfoDto boothInfo;
 
+    @Valid
+    private List<StaffInfoDto> staffs;
 
 }

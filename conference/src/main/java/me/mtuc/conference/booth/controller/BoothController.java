@@ -26,6 +26,13 @@ public class BoothController {
         return "/booth/edit";
     }
 
+    @GetMapping("/booth/{id}/show")
+    public String showBooth(@PathVariable Long id, Model model) {
+        BoothEditResponseDto booth = boothService.findBoothById(id);
+        model.addAttribute("booth", booth);
+        return "/booth/show";
+    }
+
     @GetMapping("/booth/")
     public String indexBooth() {
         return "/booth/index";

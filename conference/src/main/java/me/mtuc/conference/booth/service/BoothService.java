@@ -2,6 +2,7 @@ package me.mtuc.conference.booth.service;
 
 import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.booth.dto.BoothEditResponseDto;
+import me.mtuc.conference.booth.dto.BoothNewRequestDto;
 import me.mtuc.conference.booth.entity.Booths;
 import me.mtuc.conference.booth.repository.BoothRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,10 @@ public class BoothService {
                 booth.getManagerPhoneNumber(),
                 booth.getManagerEmail());
         return boothEditResponseDto;
+    }
+
+    public void newBooth(BoothNewRequestDto boothNewRequestDto) {
+
     }
 
 }

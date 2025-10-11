@@ -1,7 +1,7 @@
 package me.mtuc.conference.registrations.service;
 
 import lombok.RequiredArgsConstructor;
-import me.mtuc.conference.Util;
+import me.mtuc.conference.util.Util;
 import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.common.repository.FeeItemsRepository;
 import me.mtuc.conference.registrations.domain.Registrations;

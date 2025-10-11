@@ -2,7 +2,7 @@ package me.mtuc.conference.registrations.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import me.mtuc.conference.Util;
+import me.mtuc.conference.util.Util;
 import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
 import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
