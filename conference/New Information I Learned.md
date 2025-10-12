@@ -94,3 +94,48 @@ public class StaffInfoDto {
 #### 결론
 - 하나의 form에서 두개 이상의 entity에 나눠서 입력해야 한다면, 각각 부모 DTO와 자식 DTO를 생성하여 @requestBody를 통해 한번에 받을 수 있도록 한다.
 
+## 2025-10-12
+### lombok에서 builder를 사용할 때 default로 선언되어 있지만 null로 build되는 이유
+#### 개요
+- booth service level에서 booth add를 하는 과정을 작업하는 중에 dto를 받아서 booths entity를 bulid해준다.
+- 이때 생성한 연관관계 편의 메서드를 사용하는데 NPE가 발생했다.
+- Booths entity에 있는 연관관계 편의 메서드
+- ```java
+    @Builder
+    public class Booths {
+
+        @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
+        private List<Staffs> staffs = new ArrayList<>();
+    
+        //== 연관관계 편의 메서드 ==//
+        public void addStaff(Staffs staffs) {
+            this.getStaffs().add(staffs);
+            staffs.setBooths(this);
+        }
+    }
+  ```
+  
+#### lombok에서 제공하는 Builder를 사용하면 해당 필드는 초기화로 설정해 버리는 이슈
+- Lombok에서 제공하는 builder는 해당 클레스에 있는 필드와 이름이 동일한 메서드를 생성하고 해당 메서드를 통해 필드 값을 세팅해주는 방식으로 동작한다.
+- 이는 세팅되지 않는 값은 초기값(null, 0, false)으로 세팅된다는 것을 의미한다.
+
+#### 대응방법
+- ```java
+    @Builder
+    public class Booths {
+
+        @Builder.Default
+        @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
+        private List<Staffs> staffs = new ArrayList<>();
+    
+        //== 연관관계 편의 메서드 ==//
+        public void addStaff(Staffs staffs) {
+            this.getStaffs().add(staffs);
+            staffs.setBooths(this);
+        }
+    }
+  ```
+- @Builder.Default를 부여한다면 해당 필드는 선언되어 있는 값으로 초기화를 시킨다.
+- 간단하게 해결 가능
+#### 결론 
+- Builder를 사용할때 초기화를 지정해야 하는 필드는 Builder.default를 적용하자.
