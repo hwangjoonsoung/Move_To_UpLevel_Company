@@ -4,7 +4,7 @@ public record BoothEditResponseDto(
         String companyName
         , String ceoName
         , String companyPhoneNumber
-        , String boothCount
+        , int boothCount
         , String boothIds
         , String managerAffiliations
         , String managerPhoneNumber

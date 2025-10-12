@@ -1,6 +1,7 @@
 package me.mtuc.conference.booth.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,4 +55,6 @@ public class BoothInfoDto {
     @NotBlank(message = "금액을 입력해 주십시오")
     private Integer price;
 
+    @NotNull(message = "가격 코드를 입력해 주세요")
+    private Long feeItemId;
 }

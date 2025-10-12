@@ -17,8 +17,6 @@ public class BoothRestController {
 
     @PostMapping("/booth/new")
     public void newBooth(@RequestBody BoothNewRequestDto boothNewRequestDto) {
-        System.out.println("boothInfo = " + boothNewRequestDto.getBoothInfo());
-        System.out.println("staffs = " + boothNewRequestDto.getStaffs());
-
+        boothService.newBooth(boothNewRequestDto);
     }
 }

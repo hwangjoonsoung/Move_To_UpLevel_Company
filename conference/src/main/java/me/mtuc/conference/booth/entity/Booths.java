@@ -7,6 +7,7 @@ import me.mtuc.conference.enums.PayMethod;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 @Builder
 @Getter
 @Setter
+@ToString
 public class Booths {
 
     @Id
@@ -24,8 +26,9 @@ public class Booths {
     @JoinColumn(name = "fee_items_id")
     private FeeItems feeItems;
 
+    @Builder.Default
     @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
-    private ArrayList<Staffs> staffs = new ArrayList<>();
+    private List<Staffs> staffs = new ArrayList<>();
 
     @Column(name = "company_name", length = 50, nullable = false)
     private String companyName;
@@ -37,7 +40,7 @@ public class Booths {
     private String companyPhoneNumber;
 
     @Column(name = "booth_count", length = 1,nullable = false)
-    private String boothCount;
+    private Integer boothCount;
 
     @Column(name = "booth_ids",length = 20, nullable = false)
     private String boothIds;
@@ -87,8 +90,9 @@ public class Booths {
         this.dateOfUpdate = LocalDateTime.now();
     }
 
-    private void updateBooth(){
-
+    //== 연관관계 편의 메서드 ==//
+    public void addStaff(Staffs staffs) {
+        this.getStaffs().add(staffs);
+        staffs.setBooths(this);
     }
-
 }

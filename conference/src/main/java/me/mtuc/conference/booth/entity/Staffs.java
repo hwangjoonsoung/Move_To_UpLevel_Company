@@ -1,11 +1,9 @@
 package me.mtuc.conference.booth.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Entity
 @Getter
 @Setter
@@ -27,5 +25,10 @@ public class Staffs {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booths_id")
     private Booths booths;
+
+    public void setBooths(Booths booths) {
+        this.booths = booths;
+        booths.getStaffs().add(this);
+    }
 
 }
