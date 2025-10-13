@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.mtuc.conference.booth.entity.Booths;
-import me.mtuc.conference.registrations.domain.Registrations;
+import me.mtuc.conference.booth.entity.Booth;
+import me.mtuc.conference.registrations.domain.Registration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "fee_items")
-public class FeeItems {
+@Table(name = "fee_item")
+public class FeeItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +33,12 @@ public class FeeItems {
     private boolean isMember = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fees_id")
-    private Fees fees;
+    @JoinColumn(name = "fee_id")
+    private Fee fee;
 
-    @OneToMany(mappedBy = "feeItems",cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<Registrations> registrations = new ArrayList<>();
+    @OneToMany(mappedBy = "feeItem",cascade = CascadeType.ALL ,orphanRemoval = true)
+    private List<Registration> registrations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "feeItems",cascade = CascadeType.ALL ,orphanRemoval = true)
-    private List<Booths> booths = new ArrayList<>();
+    @OneToMany(mappedBy = "feeItem",cascade = CascadeType.ALL ,orphanRemoval = true)
+    private List<Booth> booths = new ArrayList<>();
 }

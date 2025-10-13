@@ -97,14 +97,14 @@ public class StaffInfoDto {
 ## 2025-10-12
 ### lombok에서 builder를 사용할 때 default로 선언되어 있지만 null로 build되는 이유
 #### 개요
-- booth service level에서 booth add를 하는 과정을 작업하는 중에 dto를 받아서 booths entity를 bulid해준다.
+- booth service level에서 booth add를 하는 과정을 작업하는 중에 dto를 받아서 booth entity를 bulid해준다.
 - 이때 생성한 연관관계 편의 메서드를 사용하는데 NPE가 발생했다.
 - Booths entity에 있는 연관관계 편의 메서드
 - ```java
     @Builder
     public class Booths {
 
-        @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
+        @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL , orphanRemoval = true)
         private List<Staffs> staffs = new ArrayList<>();
     
         //== 연관관계 편의 메서드 ==//
@@ -125,7 +125,7 @@ public class StaffInfoDto {
     public class Booths {
 
         @Builder.Default
-        @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
+        @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL , orphanRemoval = true)
         private List<Staffs> staffs = new ArrayList<>();
     
         //== 연관관계 편의 메서드 ==//

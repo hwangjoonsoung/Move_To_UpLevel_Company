@@ -2,7 +2,7 @@ package me.mtuc.conference.booth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import me.mtuc.conference.common.entity.FeeItems;
+import me.mtuc.conference.common.entity.FeeItem;
 import me.mtuc.conference.enums.PayMethod;
 
 import java.time.LocalDateTime;
@@ -15,25 +15,25 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-@Table(name = "booths")
-public class Booths {
+@Table(name = "booth")
+public class Booth {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fee_items_id")
-    private FeeItems feeItems;
+    @JoinColumn(name = "fee_item_id")
+    private FeeItem feeItem;
 
     @Builder.Default
-    @OneToMany(mappedBy = "booths", cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Staffs> staffs = new ArrayList<>();
+    @OneToMany(mappedBy = "booth", cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<Staff> staff = new ArrayList<>();
 
     @Column(name = "company_name", length = 50, nullable = false)
     private String companyName;
 
-    @Column(name = "eco_name", length = 50 , nullable = false)
+    @Column(name = "ceo_name", length = 50 , nullable = false)
     private String ceoName;
 
     @Column(name = "company_phone_number", length = 30,nullable = false)
@@ -91,8 +91,8 @@ public class Booths {
     }
 
     //== 연관관계 편의 메서드 ==//
-    public void addStaff(Staffs staffs) {
-        this.getStaffs().add(staffs);
-        staffs.setBooths(this);
+    public void addStaff(Staff staff) {
+        this.getStaff().add(staff);
+        staff.setBooth(this);
     }
 }

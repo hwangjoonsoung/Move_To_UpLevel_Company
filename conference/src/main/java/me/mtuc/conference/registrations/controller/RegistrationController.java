@@ -1,8 +1,8 @@
 package me.mtuc.conference.registrations.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.mtuc.conference.registrations.dto.RegistrationsEditResponseDto;
-import me.mtuc.conference.registrations.service.RegistrationsService;
+import me.mtuc.conference.registrations.dto.RegistrationEditResponseDto;
+import me.mtuc.conference.registrations.service.RegistrationService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor
-public class RegistrationsController {
+public class RegistrationController {
 
-    private final RegistrationsService registrationsService;
+    private final RegistrationService registrationService;
 
     @GetMapping("/registrations/")
     public String index() {
@@ -20,19 +20,20 @@ public class RegistrationsController {
     }
 
     @GetMapping("/registrations/new")
-    public String newRegistrations() {
+    public String newRegistration() {
         return "/registrations/new";
     }
 
     @GetMapping("/registrations/{id}/edit")
-    public String editRegistrations(@PathVariable Long id, Model model) {
-        RegistrationsEditResponseDto registrations = registrationsService.getRegistrations(id);
+    public String editRegistration(@PathVariable Long id, Model model) {
+        RegistrationEditResponseDto registration = registrationService.getRegistration(id);
+        model.addAttribute("registration", registration);
         return "/registrations/edit";
     }
 
     @GetMapping("/registrations/{id}")
-    public String showRegistrations(@PathVariable(name = "id") Long id) {
-        registrationsService.getRegistrations(id);
+    public String showRegistration(@PathVariable(name = "id") Long id) {
+        registrationService.getRegistration(id);
         return "/registrations/edit";
     }
 

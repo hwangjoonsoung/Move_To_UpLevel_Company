@@ -1,4 +1,4 @@
-create table data_edit_logs
+create table data_edit_log
 (
     id              int auto_increment
         primary key,
@@ -9,32 +9,32 @@ create table data_edit_logs
     edit_reason     varchar(255) null
 );
 
-create table fees
+create table fee
 (
-    id   int auto_increment
+    id   bigint auto_increment
         primary key,
     name varchar(50) null,
     description text        null
 );
 
-create table fee_items
+create table fee_item
 (
-    id     int auto_increment
+    id     bigint auto_increment
         primary key,
-    fee_id int         not null,
+    fee_id bigint         not null,
     price  int         null,
     member_type varchar(10) null,
     is_member tinyint(1)  null,
-    constraint FK_fees_TO_fee_item_1
-        foreign key (fee_id) references fees (id)
+    constraint FK_fee_TO_fee_item_1
+        foreign key (fee_id) references fee (id)
 );
 
-create table Registrations
+create table registration
 (
-    id              int auto_increment
+    id              bigint auto_increment
         primary key,
     good_name       varchar(50) null,
-    fee_item_id       int null,
+    fee_item_id     bigint null,
     price           int         null,
     amount          int         null,
     pay_method      varchar(10) null,
@@ -53,14 +53,14 @@ create table Registrations
     date_of_create  datetime    null,
     is_deleted  tinyint(1)    default 0,
     member_id       int(10)         null,
-    constraint FK_fee_item_TO_registrations_1
-        foreign key (fee_item_id) references fee_items (id)
+    constraint FK_fee_item_TO_registration_1
+        foreign key (fee_item_id) references fee_item (id)
 );
 
-CREATE TABLE booths
+CREATE TABLE booth
 (
-    id                   int NOT NULL primary key auto_increment,
-    fee_item_id          int NOT NULL,
+    id                   bigint NOT NULL primary key auto_increment,
+    fee_item_id          bigint NOT NULL,
     company_name         varchar(50) NULL,
     ceo_name             varchar(50) NULL,
     company_phone_number varchar(30) NULL,
@@ -78,17 +78,17 @@ CREATE TABLE booths
     date_of_payment      datetime NULL,
     date_of_create      datetime NULL,
     date_of_update      datetime NULL,
-    constraint FK_fee_item_TO_booths_1
-        foreign key (fee_item_id) references fee_items (id)
+    constraint FK_fee_item_TO_booth_1
+        foreign key (fee_item_id) references fee_item (id)
 );
 
-CREATE TABLE staffs
+CREATE TABLE staff
 (
-    id          int NOT NULL,
-    booth_id    int NOT NULL,
+    id          bigint NOT NULL primary key auto_increment,
+    booth_id    bigint NOT NULL,
     name        varchar(30) NULL,
     affiliation varchar(50) NULL,
     position    varchar(50) NULL,
     constraint FK_booth_TO_staff_1
-        foreign key (booth_id) references booths (id)
+        foreign key (booth_id) references booth (id)
 );

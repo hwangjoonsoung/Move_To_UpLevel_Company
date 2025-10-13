@@ -9,8 +9,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "staffs")
-public class Staffs {
+@Table(name = "staff")
+public class Staff {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +24,12 @@ public class Staffs {
     private String position;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booths_id")
-    private Booths booths;
+    @JoinColumn(name = "booth_id")
+    private Booth booth;
 
-    public void setBooths(Booths booths) {
-        this.booths = booths;
-        booths.getStaffs().add(this);
+    public void setBooth(Booth booth) {
+        this.booth = booth;
+        booth.getStaff().add(this);
     }
 
 }

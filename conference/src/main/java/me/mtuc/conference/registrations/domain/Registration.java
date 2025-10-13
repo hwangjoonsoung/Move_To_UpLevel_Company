@@ -2,8 +2,8 @@ package me.mtuc.conference.registrations.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.mtuc.conference.common.entity.FeeItem;
 import me.mtuc.conference.util.Util;
-import me.mtuc.conference.common.entity.FeeItems;
 import me.mtuc.conference.enums.PayMethod;
 import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
 
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "registrations")
-public class Registrations {
+public class Registration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,8 @@ public class Registrations {
     private String goodName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fee_items_id")
-    private FeeItems feeItems;
+    @JoinColumn(name = "fee_item_id")
+    private FeeItem feeItem;
 
     @Column(nullable = false, length = 50)
     private int price = 0;
@@ -79,9 +79,9 @@ public class Registrations {
     @Column(nullable = false, length = 10)
     private int memberId = 0;
 
-    public void updateRegistrations(RegistrationRequestDto registrationRequestDto, FeeItems feeItems){
+    public void updateRegistrations(RegistrationRequestDto registrationRequestDto, FeeItem feeItem){
         this.goodName = registrationRequestDto.getGoodName();
-        this.feeItems = feeItems;
+        this.feeItem = feeItem;
         this.price = registrationRequestDto.getPrice();
         this.name = registrationRequestDto.getName();
         this.birth = Util.stringToLocalDate(registrationRequestDto.getBirth());
