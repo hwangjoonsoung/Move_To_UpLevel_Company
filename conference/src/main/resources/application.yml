@@ -11,13 +11,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         show_sql: true
     defer-datasource-initialization: true
-  sql:
-    init:
-      data-locations: classpath:sql/default.sql #시작하면 sql query 동작할 수 있도록
+
+#    default.sql이 동작할 수 있도록 변경한다
+#  sql:
+#    init:
+#      data-locations: classpath:sql/default.sql
+#      mode: always

@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "staffs")
 public class Staffs {
 
     @Id
