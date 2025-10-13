@@ -90,5 +90,5 @@ CREATE TABLE staffs
     affiliation varchar(50) NULL,
     position    varchar(50) NULL,
     constraint FK_booth_TO_staff_1
-        foreign key (booth_id) references booth (id)
+        foreign key (booth_id) references booths (id)
 );
