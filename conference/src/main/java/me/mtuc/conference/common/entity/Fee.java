@@ -21,6 +21,7 @@ public class Fee {
     private String name;
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @OneToMany(mappedBy = "fee" , cascade = CascadeType.ALL , orphanRemoval = true)

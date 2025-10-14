@@ -24,7 +24,7 @@ public class FeeItem {
     private Long id;
 
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(name = "member_type", nullable = false, length = 10)
     private String memberType;

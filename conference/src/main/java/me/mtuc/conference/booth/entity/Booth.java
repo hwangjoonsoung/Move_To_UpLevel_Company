@@ -60,14 +60,14 @@ public class Booth {
     @Column(name = "password" , length = 50,nullable = false)
     private String password;
 
-    @Column(name = "price",length = 10)
-    private int price = 0;
+    @Column(name = "price")
+    private Integer price = 0;
 
     @Column(name = "payment_status",length = 1)
     private boolean paymentStatus = false;
 
-    @Column(name = "amount",length = 10)
-    private int amount = 0;
+    @Column(name = "amount")
+    private Integer amount = 0;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method",length = 10)
