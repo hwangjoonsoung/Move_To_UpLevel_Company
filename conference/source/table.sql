@@ -79,6 +79,7 @@ CREATE TABLE booth
     date_of_payment      datetime NULL,
     date_of_create      datetime NULL,
     date_of_update      datetime NULL,
+    is_deleted  tinyint(1)    default 0,
     constraint FK_fee_item_TO_booth_1
         foreign key (fee_item_id) references fee_item (id)
 );
@@ -90,6 +91,7 @@ CREATE TABLE staff
     name        varchar(30) NULL,
     affiliation varchar(50) NULL,
     position    varchar(50) NULL,
+    is_deleted  tinyint(1)    default 0,
     constraint FK_booth_TO_staff_1
         foreign key (booth_id) references booth (id)
 );

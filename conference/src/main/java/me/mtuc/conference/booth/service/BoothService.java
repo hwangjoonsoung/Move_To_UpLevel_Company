@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.booth.dto.BoothEditResponseDto;
 import me.mtuc.conference.booth.dto.BoothInfoDto;
 import me.mtuc.conference.booth.dto.BoothRequestDto;
+import me.mtuc.conference.booth.dto.StaffInfoDto;
 import me.mtuc.conference.booth.entity.Booth;
 import me.mtuc.conference.booth.entity.Staff;
 import me.mtuc.conference.booth.repository.BoothRepository;
@@ -11,6 +12,7 @@ import me.mtuc.conference.common.entity.FeeItem;
 import me.mtuc.conference.common.repository.FeeItemsRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -69,7 +71,7 @@ public class BoothService {
     public Long editBooth(Long id, BoothRequestDto boothRequestDto) {
         Booth booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("부스 신청 내역이 없습니다."));
 
-        boothRepository.deleteStaffNativeQuery(booth.getId());
+        boothRepository.deleteStaffWithEntity(booth.getId());
 
         FeeItem feeItem = feeItemsRepository.findById(boothRequestDto.getBoothInfo().getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
         booth.updateBooth(boothRequestDto, feeItem);

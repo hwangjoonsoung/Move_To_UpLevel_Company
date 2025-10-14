@@ -27,9 +27,12 @@ public class Staff {
     @JoinColumn(name = "booth_id")
     private Booth booth;
 
-    public void setBooth(Booth booth) {
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private boolean isDeleted = false;
+
+    protected void setBooth(Booth booth) {
         this.booth = booth;
-        booth.getStaff().add(this);
     }
 
 }

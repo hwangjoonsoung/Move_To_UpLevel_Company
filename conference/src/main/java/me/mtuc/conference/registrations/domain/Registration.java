@@ -73,6 +73,7 @@ public class Registration {
     @Column(name = "date_of_create", nullable = false)
     private LocalDateTime dateOfCreate;
 
+    @Builder.Default
     @Column(name = "is_deleted", length = 1)
     private boolean isDeleted = false;
 

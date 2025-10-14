@@ -82,6 +82,10 @@ public class Booth {
     @Column(name = "date_of_update")
     private LocalDateTime dateOfUpdate;
 
+    @Column(name = "is_deleted")
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @PrePersist
     private void onPersist(){
         this.dateOfCreate = LocalDateTime.now();
