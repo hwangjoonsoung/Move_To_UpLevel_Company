@@ -79,7 +79,7 @@ public class Registration {
     @Column(nullable = false)
     private Integer memberId = 0;
 
-    public void updateRegistrations(RegistrationRequestDto registrationRequestDto, FeeItem feeItem){
+    public void updateRegistration(RegistrationRequestDto registrationRequestDto, FeeItem feeItem){
         this.goodName = registrationRequestDto.getGoodName();
         this.feeItem = feeItem;
         this.price = registrationRequestDto.getPrice();

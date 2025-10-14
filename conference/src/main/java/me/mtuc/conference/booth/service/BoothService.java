@@ -3,12 +3,15 @@ package me.mtuc.conference.booth.service;
 import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.booth.dto.BoothEditResponseDto;
 import me.mtuc.conference.booth.dto.BoothInfoDto;
-import me.mtuc.conference.booth.dto.BoothNewRequestDto;
+import me.mtuc.conference.booth.dto.BoothRequestDto;
 import me.mtuc.conference.booth.entity.Booth;
 import me.mtuc.conference.booth.entity.Staff;
 import me.mtuc.conference.booth.repository.BoothRepository;
+import me.mtuc.conference.common.entity.FeeItem;
 import me.mtuc.conference.common.repository.FeeItemsRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -32,8 +35,8 @@ public class BoothService {
         return boothEditResponseDto;
     }
 
-    public void newBooth(BoothNewRequestDto boothNewRequestDto) {
-        BoothInfoDto boothInfo = boothNewRequestDto.getBoothInfo();
+    public Long newBooth(BoothRequestDto boothRequestDto) {
+        BoothInfoDto boothInfo = boothRequestDto.getBoothInfo();
 
         Booth booth = Booth.builder()
                 .companyName(boothInfo.getCompanyName())
@@ -50,7 +53,7 @@ public class BoothService {
                 .feeItem(feeItemsRepository.getReferenceById(boothInfo.getFeeItemId()))
                 .build();
 
-        boothNewRequestDto.getStaffs().forEach(staffInfoDto -> {
+        boothRequestDto.getStaffs().forEach(staffInfoDto -> {
             Staff staff = Staff.builder()
                     .name(staffInfoDto.getName())
                     .affiliation(staffInfoDto.getAffiliation())
@@ -59,7 +62,18 @@ public class BoothService {
             booth.addStaff(staff);
         });
 
-        boothRepository.save(booth);
+        Booth savedBooth = boothRepository.save(booth);
+        return savedBooth.getId();
     }
 
+    public Long editBooth(Long id, BoothRequestDto boothRequestDto) {
+        Booth booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("부스 신청 내역이 없습니다."));
+
+        boothRepository.deleteStaffNativeQuery(booth.getId());
+
+        FeeItem feeItem = feeItemsRepository.findById(boothRequestDto.getBoothInfo().getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
+        booth.updateBooth(boothRequestDto, feeItem);
+
+        return id;
+    }
 }

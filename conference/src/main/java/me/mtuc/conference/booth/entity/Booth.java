@@ -2,6 +2,8 @@ package me.mtuc.conference.booth.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.mtuc.conference.booth.dto.BoothRequestDto;
+import me.mtuc.conference.booth.dto.StaffInfoDto;
 import me.mtuc.conference.common.entity.FeeItem;
 import me.mtuc.conference.enums.PayMethod;
 
@@ -94,5 +96,29 @@ public class Booth {
     public void addStaff(Staff staff) {
         this.getStaff().add(staff);
         staff.setBooth(this);
+    }
+
+    public void updateBooth(BoothRequestDto boothRequestDto, FeeItem feeItem) {
+        this.companyName= boothRequestDto.getBoothInfo().getCompanyName();
+        this.ceoName= boothRequestDto.getBoothInfo().getCeoName();
+        this.companyPhoneNumber= boothRequestDto.getBoothInfo().getCompanyPhoneNumber();
+        this.boothCount= boothRequestDto.getBoothInfo().getBoothCount();
+        this.boothIds= boothRequestDto.getBoothInfo().getBoothIds();
+        this.managerName= boothRequestDto.getBoothInfo().getManagerName();
+        this.managerAffiliations= boothRequestDto.getBoothInfo().getManagerAffiliations();
+        this.managerPhoneNumber= boothRequestDto.getBoothInfo().getManagerPhoneNumber();
+        this.managerEmail= boothRequestDto.getBoothInfo().getManagerEmail();
+        this.price= boothRequestDto.getBoothInfo().getPrice();
+        this.feeItem = feeItem;
+        List<StaffInfoDto> staffs = boothRequestDto.getStaffs();
+        
+        staffs.forEach(staff -> {
+            Staff newStaff = Staff.builder()
+                    .affiliation(staff.getAffiliation())
+                    .name(staff.getName())
+                    .position(staff.getPosition())
+                    .booth(this).build();
+            this.getStaff().add(newStaff);
+        });
     }
 }

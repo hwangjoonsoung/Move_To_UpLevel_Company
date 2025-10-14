@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Setter@Getter@Builder
-public class BoothNewRequestDto {
+public class BoothRequestDto {
 
     @Valid
     private BoothInfoDto boothInfo;

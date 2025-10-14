@@ -45,7 +45,7 @@ public class RegistrationService {
         Registration registration = registrationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("사전등록 내역이 없습니다."));
         FeeItem feeItem = feeItemsRepository.findById(registrationRequestDto.getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
 
-        registration.updateRegistrations(registrationRequestDto,feeItem);
+        registration.updateRegistration(registrationRequestDto,feeItem);
 
     }
 
