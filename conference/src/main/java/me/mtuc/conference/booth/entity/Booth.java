@@ -115,7 +115,6 @@ public class Booth {
         this.price= boothRequestDto.getBoothInfo().getPrice();
         this.feeItem = feeItem;
         List<StaffInfoDto> staffs = boothRequestDto.getStaffs();
-        this.getStaff().clear();
 
         staffs.forEach(staff -> {
             Staff newStaff = Staff.builder()

@@ -10,4 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoothRepository extends JpaRepository<Booth, Long> {
 
+    @Modifying
+    @Query("update Staff s set s.isDeleted = true where s.booth = :booth and s.isDeleted = false")
+    void deleteStaffWithEntity(@Param("booth") Booth booth);
+
 }

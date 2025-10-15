@@ -73,6 +73,7 @@ public class BoothService {
 
     public Long editBooth(Long id, BoothRequestDto boothRequestDto) {
         Booth booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("부스 신청 내역이 없습니다."));
+        boothRepository.deleteStaffWithEntity(booth);
 
         FeeItem feeItem = feeItemsRepository.findById(boothRequestDto.getBoothInfo().getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
         booth.updateBooth(boothRequestDto, feeItem);

@@ -139,3 +139,81 @@ public class StaffInfoDto {
 - 간단하게 해결 가능
 #### 결론 
 - Builder를 사용할때 초기화를 지정해야 하는 필드는 Builder.default를 적용하자.
+## 2025-10-15
+### 영속되어 있는 entity를 비영속 시켰을때 발생하는 문제
+#### 개요
+- booth edit을 하는 과정에서 항상 그랬듯이 변경감지를 통해 booth를 수정하려고 시도했다.
+- 문제는 staff를 수정하려고 하면 영속상태를 풀어버리는 문제가 발생해서 해결책을 찾고 있었다.
+- ```java
+    //service
+    public Long editBooth(Long id, BoothRequestDto boothRequestDto) {
+        Booth booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("부스 신청 내역이 없습니다."));
+        boothRepository.deleteStaffWithEntity(booth);
+
+        FeeItem feeItem = feeItemsRepository.findById(boothRequestDto.getBoothInfo().getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
+        booth.updateBooth(boothRequestDto, feeItem);
+
+        return id;
+    }
+  
+  //repository
+  @Repository
+    public interface BoothRepository extends JpaRepository<Booth, Long> {
+    @Modifying(clearAutomatically = true)
+    @Query("update Staff s set s.isDeleted = true where s.booth = :booth and s.isDeleted = false")
+    void deleteStaffWithEntity(@Param("booth") Booth booth);
+  }
+  
+  //booth entity
+  public void updateBooth(BoothRequestDto boothRequestDto, FeeItem feeItem) {
+        this.companyName= boothRequestDto.getBoothInfo().getCompanyName();
+        this.ceoName= boothRequestDto.getBoothInfo().getCeoName();
+        this.companyPhoneNumber= boothRequestDto.getBoothInfo().getCompanyPhoneNumber();
+        this.boothCount= boothRequestDto.getBoothInfo().getBoothCount();
+        this.boothIds= boothRequestDto.getBoothInfo().getBoothIds();
+        this.managerName= boothRequestDto.getBoothInfo().getManagerName();
+        this.managerAffiliations= boothRequestDto.getBoothInfo().getManagerAffiliations();
+        this.managerPhoneNumber= boothRequestDto.getBoothInfo().getManagerPhoneNumber();
+        this.managerEmail= boothRequestDto.getBoothInfo().getManagerEmail();
+        this.price= boothRequestDto.getBoothInfo().getPrice();
+        this.feeItem = feeItem;
+        List<StaffInfoDto> staffs = boothRequestDto.getStaffs();
+        this.getStaff().clear();
+
+        staffs.forEach(staff -> {
+            Staff newStaff = Staff.builder()
+                    .affiliation(staff.getAffiliation())
+                    .name(staff.getName())
+                    .position(staff.getPosition())
+                    .build();
+            this.addStaff(newStaff);
+        });
+    }
+  
+  //staff entity
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "booth_id")
+  private Booth booth;
+  ```
+#### 원인
+- 프로세스를 잘못 설계했다.
+  1. id를 통해 booth가져오기
+  2. 기존에 입력되어 있는 staff를 모두 delete = true로 변경 (영속되어 있는 entity를 비영속으로 변경)
+  3. dto를 통해 받은 정보를 booth로 변경
+  4. booth에소 getStaff를 하는 순간 에러 발생
+- 4번에서 에러가 발생하는 이유는 fetch가 lazy로 되어 있는데 우리는 2번에 비영속 상태로 변경했기 때문이다.
+- 당연히 사용을 하려고 하는 시점에서는 비영속상태임으로 exception이 발생한 것이다.
+
+#### 해결방법
+- ```java
+  //repository
+  @Repository
+    public interface BoothRepository extends JpaRepository<Booth, Long> {
+    @Modifying
+    @Query("update Staff s set s.isDeleted = true where s.booth = :booth and s.isDeleted = false")
+    void deleteStaffWithEntity(@Param("booth") Booth booth);
+  }
+  ```
+- 영속상태를 유지할 수 있도록 변경하면 간단하게 해결 가능하다.
+#### 결론
+- proxy에 no Session이면 영속상태 여부를 확인하자.
