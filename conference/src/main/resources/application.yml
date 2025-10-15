@@ -3,7 +3,7 @@ spring:
     livereload:
       enabled: false
   application:
-  name: conference
+    name: conference
   datasource:
     url: jdbc:mysql://localhost:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
     password: conference123!!
@@ -17,8 +17,13 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
         show_sql: true
-    defer-datasource-initialization: true
-
+    defer-datasource-initialization: false
+    
+  flyway:
+    enabled: true
+    locations: classpath:sql/migration
+    baseline-on-migrate: true
+    baseline-version: 1
 #    default.sql이 동작할 수 있도록 변경한다
 #  sql:
 #    init:
