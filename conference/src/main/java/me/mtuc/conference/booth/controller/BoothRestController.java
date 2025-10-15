@@ -31,5 +31,6 @@ public class BoothRestController {
         URI uri = new URI("/booth/" + editedBoothId + "/edit");
         BoothIdResponseDto boothIdResponseDto = new BoothIdResponseDto(editedBoothId);
         return ResponseEntity.created(uri).body(boothIdResponseDto);
+
     }
 }

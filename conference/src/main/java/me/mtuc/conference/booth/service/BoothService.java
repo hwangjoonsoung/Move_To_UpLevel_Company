@@ -25,6 +25,7 @@ public class BoothService {
     private final BoothRepository boothRepository;
     private final FeeItemsRepository feeItemsRepository;
 
+    @Transactional(readOnly = true)
     public BoothEditResponseDto findBoothById(Long id) {
         Booth booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 부스 정보가 없습니다"));
 
@@ -72,8 +73,6 @@ public class BoothService {
 
     public Long editBooth(Long id, BoothRequestDto boothRequestDto) {
         Booth booth = boothRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("부스 신청 내역이 없습니다."));
-
-        boothRepository.deleteStaffWithEntity(booth);
 
         FeeItem feeItem = feeItemsRepository.findById(boothRequestDto.getBoothInfo().getFeeItemId()).orElseThrow(() -> new IllegalArgumentException("해당 금액이 없습니다"));
         booth.updateBooth(boothRequestDto, feeItem);

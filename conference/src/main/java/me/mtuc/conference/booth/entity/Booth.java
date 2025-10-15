@@ -115,14 +115,15 @@ public class Booth {
         this.price= boothRequestDto.getBoothInfo().getPrice();
         this.feeItem = feeItem;
         List<StaffInfoDto> staffs = boothRequestDto.getStaffs();
-        
+        this.getStaff().clear();
+
         staffs.forEach(staff -> {
             Staff newStaff = Staff.builder()
                     .affiliation(staff.getAffiliation())
                     .name(staff.getName())
                     .position(staff.getPosition())
-                    .booth(this).build();
-            this.getStaff().add(newStaff);
+                    .build();
+            this.addStaff(newStaff);
         });
     }
 }
