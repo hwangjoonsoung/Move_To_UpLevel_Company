@@ -10,8 +10,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "fees")
-public class Fees {
+@Table(name = "fee")
+public class Fee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,9 @@ public class Fees {
     private String name;
 
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "fees" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<FeeItems> feeItems = new ArrayList<>();
+    @OneToMany(mappedBy = "fee" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<FeeItem> feeItems = new ArrayList<>();
 }

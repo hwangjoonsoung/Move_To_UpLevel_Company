@@ -2,8 +2,8 @@ package me.mtuc.conference.registrations.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import me.mtuc.conference.Util;
-import me.mtuc.conference.common.entity.FeeItems;
+import me.mtuc.conference.common.entity.FeeItem;
+import me.mtuc.conference.util.Util;
 import me.mtuc.conference.enums.PayMethod;
 import me.mtuc.conference.registrations.dto.RegistrationRequestDto;
 
@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Registrations {
+@Table(name = "registration")
+public class Registration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +27,13 @@ public class Registrations {
     private String goodName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fee_items_id")
-    private FeeItems feeItems;
+    @JoinColumn(name = "fee_item_id")
+    private FeeItem feeItem;
 
-    @Column(nullable = false, length = 50)
-    private int price = 0;
-    @Column(nullable = false, length = 50)
-    private int amount = 0;
+    @Column(nullable = false)
+    private Integer price = 0;
+    @Column(nullable = false)
+    private Integer amount = 0;
 
     @Column(name = "pay_method", nullable = true, length = 20)
     @Enumerated(EnumType.STRING)
@@ -46,12 +47,12 @@ public class Registrations {
     @Column(name= "order_id", nullable = true, length = 20)
     private String orderId;
 
-    @Column(name = "date_id_payment", nullable = true)
+    @Column(name = "date_of_payment", nullable = true)
     private LocalDateTime dateOfPayment;
 
     @Column(nullable = false, length = 30)
     private String name;
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private LocalDate birth;
     @Column(nullable = false, length = 50)
     private String affiliation;
@@ -72,15 +73,16 @@ public class Registrations {
     @Column(name = "date_of_create", nullable = false)
     private LocalDateTime dateOfCreate;
 
+    @Builder.Default
     @Column(name = "is_deleted", length = 1)
     private boolean isDeleted = false;
 
-    @Column(nullable = false, length = 10)
-    private int memberId = 0;
+    @Column(nullable = false)
+    private Integer memberId = 0;
 
-    public void updateRegistrations(RegistrationRequestDto registrationRequestDto, FeeItems feeItems){
+    public void updateRegistration(RegistrationRequestDto registrationRequestDto, FeeItem feeItem){
         this.goodName = registrationRequestDto.getGoodName();
-        this.feeItems = feeItems;
+        this.feeItem = feeItem;
         this.price = registrationRequestDto.getPrice();
         this.name = registrationRequestDto.getName();
         this.birth = Util.stringToLocalDate(registrationRequestDto.getBirth());

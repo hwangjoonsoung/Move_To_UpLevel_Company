@@ -2,7 +2,7 @@ package me.mtuc.conference.registrations.dto;
 
 import java.time.LocalDate;
 
-public record RegistrationsEditResponseDto(
+public record RegistrationEditResponseDto(
         String name
         , LocalDate birth
         , String affiliation

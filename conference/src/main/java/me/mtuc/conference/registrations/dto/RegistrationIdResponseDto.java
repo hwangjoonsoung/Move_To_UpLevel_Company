@@ -1,6 +1,6 @@
 package me.mtuc.conference.registrations.dto;
 
-public record RegistrationsIdResponseDto(
+public record RegistrationIdResponseDto(
         Long id
 ) {
 }
