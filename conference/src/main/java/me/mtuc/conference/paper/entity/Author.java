@@ -22,7 +22,7 @@ public class Author {
     private Paper paper;
 
     @Column(name = "affiliation_code",columnDefinition = "int")
-    private Integer affiliation_code;
+    private Integer affiliationCode;
 
     @Column(name = "deleted")
     @Builder.Default
