@@ -7,6 +7,8 @@ import me.mtuc.conference.enums.AbstractLanguage;
 import me.mtuc.conference.enums.PresentationType;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -18,13 +20,14 @@ public class Paper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "int")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false,cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",columnDefinition = "int")
     private Category category;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 100)
     private String title;
 
     @Enumerated(EnumType.STRING)
@@ -34,20 +37,28 @@ public class Paper {
     @Enumerated(EnumType.STRING)
     @Column(name = "abstract_language")
     private AbstractLanguage abstractLanguage;
-    @Column(name = "keyword")
+
+    @Column(name = "keyword", length = 100)
     private String keyword;
 
-    @Column(name = "abstract",columnDefinition = "TEXT")
     @Lob
+    @Column(name = "abstract",columnDefinition = "TEXT")
     private String paperAbstract;
 
     @Column(name = "date_of_create")
     private LocalDateTime dateOfCreate;
+
     @Column(name = "date_of_update")
     private LocalDateTime dateOfUpdate;
 
     @Column(name = "deleted")
     @Builder.Default
     private boolean deleted = false;
+
+    @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Author> authors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AuthorAffiliation> authorAffiliations = new ArrayList<>();
 
 }
