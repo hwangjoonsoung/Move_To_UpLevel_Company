@@ -217,3 +217,6 @@ public class StaffInfoDto {
 - 영속상태를 유지할 수 있도록 변경하면 간단하게 해결 가능하다.
 #### 결론
 - proxy에 no Session이면 영속상태 여부를 확인하자.
+
+## 2025-10-19
+### spring에서 docker mysql에 연결할때 localhost(127.0.0.1)인 경우 발생하는 문제
