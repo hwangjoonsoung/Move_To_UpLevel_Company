@@ -220,3 +220,36 @@ public class StaffInfoDto {
 
 ## 2025-10-19
 ### spring에서 docker mysql에 연결할때 localhost(127.0.0.1)인 경우 발생하는 문제
+#### 개요
+- 선착순 이벤트 강의를 들으면서 docker를 설치하였음 
+- image로 mysql를 가져오는 도중에 spring에 연결되어 있는 DB연결을 local이 아닌 docker의 mysql에 연결하는 것이 더 좋을것 같다는 생각을 함.
+- 이때 localhost:3306이 연결이 안되는 것을 확인 하였음.
+- ```properties
+  spring:
+    devtools:
+      livereload:
+        enabled: false
+    application:
+      name: conference
+    datasource:
+      url: jdbc:mysql://localhost:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      password: conference123!!
+      username: conference
+      driver-class-name: com.mysql.cj.jdbc.Driver
+  ```
+#### 원인 
+- localhost(127.0.0.1)을 의미하는 대상의 차이로 발생한 문제
+- spring에서 localhost를 사용하면 지금 사용하고 있는 local기기를 의미한다
+- 따라서 DB계정을 생성할 때 특정 ip에만 입력할 수 있도록 하는 계정을 만들면 당연히 DB연결이 불가능하다.(access denied)
+- ```sql
+  create user 'conference'@'localhost' indentified by 'conference123!!';
+  ```
+- 즉 localhost는 local기기를 의미하며, docker image로 만들 mysql의 경우 localhost가 아니다.
+#### 해결방법
+- global한 방법
+  - ```sql
+      create user 'conference'@'%'
+    ```
+  - 위와 같이 모든 ip에 대하서 들어갈 수 있는 계정을 생성하는 방법
+  - 이 방법은 개발 단계에서만 사용해야 한다.
+  - 
