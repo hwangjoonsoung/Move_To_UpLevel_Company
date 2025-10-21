@@ -246,10 +246,17 @@ public class StaffInfoDto {
   ```
 - 즉 localhost는 local기기를 의미하며, docker image로 만들 mysql의 경우 localhost가 아니다.
 #### 해결방법
-- global한 방법
+- global한 방법 (개발단계에서 사용)
   - ```sql
       create user 'conference'@'%'
     ```
-  - 위와 같이 모든 ip에 대하서 들어갈 수 있는 계정을 생성하는 방법
+  - 위와 같이 모든 ip에 대해서 들어갈 수 있는 계정을 생성하는 방법
   - 이 방법은 개발 단계에서만 사용해야 한다.
-  - 
+- specified한 방법
+  - ```sql
+        create user 'conference'@'127,14.1.0' identified by 'passwrod'
+    ```
+  - 위와 같이 특정 ip에 대해서만 입장할 수 있는 계정을 생성해야 한다.
+#### 결론
+- localhost의 의미는 실행환경에 따라서 달라진다.
+- docker는 컨테이너 환경이기 때문에 local로 접속할 수 없으며, 이를 해결하기 위해서는 mysql계정을 생성할때 모든 ip에 대해 접근할 수 있는 계정을 만들거나, 특정 ip를 적용하는 적으로 접근 가능하다.
