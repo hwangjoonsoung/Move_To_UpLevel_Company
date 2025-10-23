@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @Setter
 @Getter
 @Builder
@@ -13,8 +15,8 @@ public class NewPaperDTO {
     @Valid
     private PaperDto paperDto;
     @Valid
-    private AuthorDto authorDto;
+    private ArrayList<AuthorDto> authorDtoList;
     @Valid
-    private AuthorAffiliationDto authorAffiliationDto;
+    private ArrayList<AuthorAffiliationDto> authorAffiliationDtoList;
 
 }

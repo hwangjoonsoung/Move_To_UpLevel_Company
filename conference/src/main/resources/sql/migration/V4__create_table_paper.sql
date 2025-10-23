@@ -28,22 +28,23 @@ CREATE TABLE paper
 CREATE TABLE author_affiliation
 (
     id               int primary key auto_increment NOT NULL,
-    paper_id         int NOT NULL,
-    affiliation_code int NULL,
-    affiliation      varchar(100) NULL,
-    deleted          boolean NULL,
+    paper_id         int          NOT NULL,
+    affiliation_code int          NOT NULL,
+    affiliation      varchar(100) NOT NULL,
+    deleted          boolean      NOT NULL DEFAULT FALSE,
 
     constraint FK_author_affiliation_to_paper_1
-    foreign key (paper_id) references paper(id)
+        foreign key (paper_id) references paper (id)
 );
 
 CREATE TABLE author
 (
     id               int primary key auto_increment NOT NULL,
-    paper_id         int NOT NULL,
-    affiliation_code int NULL,
-    deleted          boolean NULL,
+    paper_id         int          NOT NULL,
+    affiliation_code int          NOT NULL,
+    name             varchar(100) NOT NULL,
+    deleted          boolean      NOT NULL DEFAULT FALSE,
 
     constraint FK_author_to_paper_1
-        foreign key (paper_id) references paper(id)
+        foreign key (paper_id) references paper (id)
 );

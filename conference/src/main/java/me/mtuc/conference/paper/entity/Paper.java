@@ -61,4 +61,10 @@ public class Paper {
     @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AuthorAffiliation> authorAffiliations = new ArrayList<>();
 
+    //== 연관관계 편의 메서드 ==//
+    public void addAuthor(Author author){
+        this.getAuthors().add(author);
+        author.setPaper(this);
+    }
+
 }

@@ -24,6 +24,9 @@ public class Author {
     @Column(name = "affiliation_code",columnDefinition = "int")
     private Integer affiliationCode;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "deleted")
     @Builder.Default
     private boolean deleted = false;
