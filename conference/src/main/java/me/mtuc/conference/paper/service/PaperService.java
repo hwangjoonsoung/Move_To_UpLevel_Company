@@ -8,6 +8,7 @@ import me.mtuc.conference.paper.dto.AuthorDto;
 import me.mtuc.conference.paper.dto.NewPaperDTO;
 import me.mtuc.conference.paper.dto.PaperDto;
 import me.mtuc.conference.paper.entity.Author;
+import me.mtuc.conference.paper.entity.AuthorAffiliation;
 import me.mtuc.conference.paper.entity.Paper;
 import me.mtuc.conference.paper.repositroy.PaperRepository;
 import org.springframework.stereotype.Service;
@@ -47,8 +48,12 @@ public class PaperService {
         });
 
         authorAffiliationDtoList.forEach(authorAffiliationDto -> {
-            
+            AuthorAffiliation authorAffiliation = AuthorAffiliation.builder()
+                    .affiliation(authorAffiliationDto.getAffiliation())
+                    .code(authorAffiliationDto.getCode())
+                    .build();
+            paper.addAffiliation(authorAffiliation);
         });
-
+        paperRepository.save(paper);
     }
 }

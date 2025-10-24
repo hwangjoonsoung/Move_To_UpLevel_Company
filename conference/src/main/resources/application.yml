@@ -5,9 +5,9 @@ spring:
   application:
     name: conference
   datasource:
-    url: jdbc:mysql://172.17.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
     password: conference123!!
-    username: conference
+    username: conference_all
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -20,12 +20,7 @@ spring:
     defer-datasource-initialization: false
     
   flyway:
-    enabled: false
+    enabled: true
     locations: classpath:sql/migration
     baseline-on-migrate: true
     baseline-version: 1
-#    default.sql이 동작할 수 있도록 변경한다
-  sql:
-    init:
-      data-locations: classpath:sql/default.sql
-      mode: always

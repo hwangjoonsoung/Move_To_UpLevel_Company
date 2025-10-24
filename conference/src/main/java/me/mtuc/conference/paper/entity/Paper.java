@@ -67,4 +67,9 @@ public class Paper {
         author.setPaper(this);
     }
 
+    public void addAffiliation(AuthorAffiliation authorAffiliation) {
+        this.getAuthorAffiliations().add(authorAffiliation);
+        authorAffiliation.setPaper(this);
+    }
+
 }
