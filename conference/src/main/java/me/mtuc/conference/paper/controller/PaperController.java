@@ -14,7 +14,7 @@ public class PaperController {
 
     private final PaperService paperService;
 
-    @GetMapping("/")
+    @GetMapping("/paper/")
     public String index() {
         return "/paper/index";
     }
