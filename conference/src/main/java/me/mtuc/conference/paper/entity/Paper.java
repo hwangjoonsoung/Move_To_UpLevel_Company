@@ -23,7 +23,7 @@ public class Paper {
     @Column(columnDefinition = "int")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id",columnDefinition = "int")
     private Category category;
 
@@ -55,9 +55,11 @@ public class Paper {
     @Builder.Default
     private boolean deleted = false;
 
+    @Builder.Default
     @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Author> authors = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AuthorAffiliation> authorAffiliations = new ArrayList<>();
 

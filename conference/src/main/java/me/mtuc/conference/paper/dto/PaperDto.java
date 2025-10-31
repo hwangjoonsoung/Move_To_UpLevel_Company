@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import me.mtuc.conference.custom_annotation.WordCount;
 
 @Getter
 @Setter
+@ToString
 public class PaperDto {
 
     @NotBlank(message = "논문의 선택해 주시기바랍니다.")

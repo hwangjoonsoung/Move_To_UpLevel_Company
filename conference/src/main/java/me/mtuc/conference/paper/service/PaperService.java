@@ -1,6 +1,8 @@
 package me.mtuc.conference.paper.service;
 
 import lombok.RequiredArgsConstructor;
+import me.mtuc.conference.common.entity.Category;
+import me.mtuc.conference.common.repository.CategoryRepository;
 import me.mtuc.conference.enums.AbstractLanguage;
 import me.mtuc.conference.enums.PresentationType;
 import me.mtuc.conference.paper.dto.AuthorAffiliationDto;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class PaperService {
 
     private final PaperRepository paperRepository;
+    private final CategoryRepository categoryRepository;
 
     public Paper getPaperById(Long id) {
         Paper paper = paperRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 논문이 없습니다"));
@@ -31,7 +34,10 @@ public class PaperService {
         PaperDto paperDto = newPaperDTO.getPaperDto();
         List<AuthorDto> authorDtoList = newPaperDTO.getAuthorDtoList();
         List<AuthorAffiliationDto> authorAffiliationDtoList = newPaperDTO.getAuthorAffiliationDtoList();
+
+        Category category = categoryRepository.findById(Long.valueOf(paperDto.getCategory())).orElseThrow(() -> new IllegalArgumentException("해당하는 카테고리가 없습니다"));
         Paper paper = Paper.builder()
+                .category(category)
                 .title(paperDto.getTitle())
                 .presentationType(PresentationType.valueOf(paperDto.getPresentationType()))
                 .abstractLanguage(AbstractLanguage.valueOf(paperDto.getAbstractLanguage()))

@@ -17,6 +17,7 @@ public class PaperRestController {
 
     @PostMapping("/paper/new")
     public void newPaper(@RequestBody NewPaperDTO newPaperDTO) {
+        System.out.println("newPaperDTO = " + newPaperDTO);
         paperService.newPaper(newPaperDTO);
     }
 }

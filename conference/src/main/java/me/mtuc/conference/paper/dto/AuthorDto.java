@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
+@ToString
 public class AuthorDto {
 
     @NotEmpty(message = "소속정보를 입력해 주시기 바랍니다")
