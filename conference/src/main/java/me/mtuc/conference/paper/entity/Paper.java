@@ -3,8 +3,10 @@ package me.mtuc.conference.paper.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import me.mtuc.conference.common.entity.Category;
+import me.mtuc.conference.common.repository.CategoryRepository;
 import me.mtuc.conference.enums.AbstractLanguage;
 import me.mtuc.conference.enums.PresentationType;
+import me.mtuc.conference.paper.dto.PaperDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
