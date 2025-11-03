@@ -260,3 +260,45 @@ public class StaffInfoDto {
 #### 결론
 - localhost의 의미는 실행환경에 따라서 달라진다.
 - docker는 컨테이너 환경이기 때문에 local로 접속할 수 없으며, 이를 해결하기 위해서는 mysql계정을 생성할때 모든 ip에 대해 접근할 수 있는 계정을 만들거나, 특정 ip를 적용하는 적으로 접근 가능하다.
+
+## 2025-11-03
+### flyway repair
+#### 개요
+- default data를 입력하는 과정에서 insert query를 작성하는데 오타발생으로 인해서 쿼리가 동작을 안함.
+- 문제는 해당 쿼리가 정상적으로 동작해도 이미 flyway에서 막혀서 서버를 실행할 수 없는 문제가 있음
+- 기존에 해결할때는 database를 drop한 후 다시 create를 하는 것으로 해결함
+- 분명 저렇게 하는 것이 아닌텐데... 라는 생각을 하고 있었음
+#### 원인
+- 일단 오류가 발생하는 문제는 flyway의 마이크레이션 히스토리와 DB 스키마 상태의 불일치 때문이다.
+#### 시도
+1. select * from flyway_schema_history;
+2. 가장 최근 버전 삭제
+#### 실패
+- 일단 flyway_schema_history를 삭제한다고 해서 문제가 해결되는건 아니다.
+- flyway_schema_history는 성공여부를 나타내는 것이기 때문에 해당 히스토리를 지운다고 원인해결은 아니다.
+#### 해결
+- FlywayMigrationStrategy를 이용한 해결
+- ```java
+    @Configuration
+    public class FlywayRepairRunner {
+
+    @Bean
+    public FlywayMigrationStrategy flywayMigrationStrategy() {
+        return flyway -> {
+                flyway.repair();
+                flyway.migrate();
+            };
+        }
+    }
+  ```
+- server를 시작하면 flyway를 repair하고 migration을 다시 하는 것으로 한다.
+- 이렇게 하면 flyway설정에서 지정한 directory에 있는 version이 다시 쓰여진다.
+- 물론, 기존에 이상없는건 넘어감.
+#### 결론
+- flyway를 해결하는 가장 간단한 방법은 gradle에서 ./gradlew flywayRepair이다.
+- 하지만 local에서 실행하는 상황에서는 어쩔수 없이 configuration을 통해 진행할 수 밖에 없다.
+- repair이 동작하는 방식은 다음과 같다.
+  1. DB와 파일 리스트를 확인
+  2. 일하지 않는 row를 파악해서 다시 생성
+  3. migration 동작
+- 따라서 DB의 row를 삭제한다고 해서 해결할 수 있는 건 아니다.

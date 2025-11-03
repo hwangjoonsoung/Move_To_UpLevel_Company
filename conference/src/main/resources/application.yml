@@ -5,10 +5,16 @@ spring:
   application:
     name: conference
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
-    password: conference123!!
-    username: conference_all
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    db1:
+      url: jdbc:mysql://127.0.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      password: conference123!!
+      username: conference_all
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    db2:
+      url: jdbc:mysql://127.0.0.1:3306/institute?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      password: master123!!
+      username: master
+      driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
