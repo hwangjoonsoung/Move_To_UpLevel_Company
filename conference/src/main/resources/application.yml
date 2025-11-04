@@ -5,13 +5,19 @@ spring:
   application:
     name: conference
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
-    password: conference123!!
-    username: conference_all
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    db-conf:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      password: conference123!!
+      username: conference_all
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    db-institute:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/institute?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+      password: master123!!
+      username: master
+      driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -21,6 +27,7 @@ spring:
     
   flyway:
     enabled: true
-    locations: classpath:sql/migration
+  flyway.db-conf:
+    locations: classpath:sql/migration/conf
     baseline-on-migrate: true
     baseline-version: 1
