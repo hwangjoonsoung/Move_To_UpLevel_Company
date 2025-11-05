@@ -302,3 +302,91 @@ public class StaffInfoDto {
   2. 일하지 않는 row를 파악해서 다시 생성
   3. migration 동작
 - 따라서 DB의 row를 삭제한다고 해서 해결할 수 있는 건 아니다.
+## 2025-11-04
+### DB를 다중으로 연결하는 방법
+#### 개요
+- 학술대회에서 로그인을 할 때에는 학회에 있는 정보를 통해 로그인을 진행해야 한다.
+- 이때 학회에서 api를 만들어 생성하는 방법이 있고, 프로젝트 내부에서 다중으로 DB연결을 함으로 써 학회에 있는 정보를 가져와 로그인하는 방법이 있다.
+- 기존 학술대회 프로젝트가 다중 DB연결을 사용함으로 동일하게 구현했다.
+#### 구조 변경
+- 디렉터리 구조를 변경하는 것이 좋다.
+#### application.yml
+- ```yaml
+  spring:
+    devtools:
+      livereload:
+        enabled: false
+    application:
+      name: conference
+    datasource:
+      db-conf:
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/conference?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+        password: conference123!!
+        username: conference_all
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      db-institute:
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/institute?serverTimezone=Asia/Seoul&useSSL=false&allowPublicKeyRetrieval=true
+        password: master123!!
+        username: master
+        driver-class-name: com.mysql.cj.jdbc.Driver
+  ```
+- 기존 datasource를 위와같이 변경한다.
+- 여기서 db-conf, db-institute와 같이 어느 db에 연결하는지 알아볼 수 있는 naming을 하는것은 센스
+#### bean 생성
+- 각 DB에 맞도록 별도의 환경설정을 해줘야 함.
+- 디렉터리 구조를 변경한 이유가 여기서 나오는데, basePackage에서 package를 선택함으로 하위 repository가 자동으로 연결한 db에 mapping되도록 함.
+- @Primary를 설정하는 것으로 default DB를 설정할 수 있음
+- ```java
+  @Configuration
+  @EnableTransactionManagement
+  @EnableJpaRepositories(
+    basePackages = "me.mtuc.conference.conf",
+    entityManagerFactoryRef = "confEntityManagerFactory",
+    transactionManagerRef = "confTransactionManager"
+  )
+  public class ConfDataBaseConfig {
+  
+    @Primary
+    @Bean(name = "confDataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.db-conf")
+    public DataSource confDataSource() {
+      return DataSourceBuilder
+                .create()
+                .build();
+    }
+    
+    @Primary
+    @Bean(name = "confEntityManagerFactory")
+    public LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean(
+            EntityManagerFactoryBuilder entityManagerFactoryBuilder,
+            @Qualifier("confDataSource") DataSource datasource
+    ) {
+        return entityManagerFactoryBuilder
+            .dataSource(datasource)
+            .packages("me.mtuc.conference.conf")
+            .persistenceUnit("db-conf")
+            .build();
+    }
+    
+    @Primary
+    @Bean(name = "confTransactionManager")
+    public PlatformTransactionManager platformTransactionManager(@Qualifier("confEntityManagerFactory") LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean) {
+        return new JpaTransactionManager(localContainerEntityManagerFactoryBean.getObject());
+    }
+  }
+  ```
+- @EnableTransactionManagement: @Transactional 어노테이션을 사용하여 선언적으로 트랜잭션을 관리할 수 있음
+- @EnableJpaRepositories: jpa를 사용하기 위한 entityManager를 생성하기 위한 함수
+  - basePackages: 해당 경로를 설정하는 것으로 하위 디렉토리에서 사용되는 @Repository를 찾아서 빈을 생성
+  - entityManagerFactoryRef: EntityManagerFactory를 사용할 bean을 명시적으로 지정
+  - transactionManagerRef: transactionManager를 사용할 bean을 명시적으로 지정
+- confDataSource()
+  - @Primary: 애플리케이션 내에 동일한 타입의 빈이 여러 개 있을 경우, 이 빈을 default로 사용 함.
+  - @ConfigurationProperties: application.yml에서 Datasource를 바인딩 함.
+- localContainerEntityManagerFactoryBean(): database acid를 관리하는 매니저를 설정
+  - @Qualifier를 통해 confEntityManagerFactory이름을 가진 bean을 주입해줌
+  - 해당 bean을 통해 JpaTransactionManager를 생성하고 파라미터로 bean을 던져 줌으로 db-conf과 연결된 데이터베이스의 트랜잭션만 관리
+#### 결론
+1. application.yml에서 database source를 분리해서 작성
+2. DB에 따라서 package 분리
+3. configuration을 각각 작성하는 것으로 다중 DB연결 환경 구성
