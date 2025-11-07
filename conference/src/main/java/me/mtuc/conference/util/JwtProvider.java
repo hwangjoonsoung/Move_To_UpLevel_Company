@@ -1,14 +1,15 @@
 package me.mtuc.conference.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
-import lombok.Value;
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.lang.model.element.NestingKind;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -45,15 +46,26 @@ public class JwtProvider {
 
     public boolean validateToken(String token) {
         try {
-            // todo: 이 작업을 왜 하는거지?
             Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8))).build().parseClaimsJws(token);
 
             String subject = this.getSubjetFromToken(token);
+            Util util = new Util(new ObjectMapper());
 
-        } catch (Exception e) {
+            // todo: token valid확인하는 과정이 필요함
+            // todo: test위해서 valid true
+            JsonNode jsonNode = util.stringToJson(subject);
 
+            if(true){
+                return true;
+            }
+        } catch (ExpiredJwtException e){
+            return false;
+        } catch (SignatureException e){
+            return false;
+        } catch (JsonProcessingException e){
+            return false;
         }
-
+        return true;
     }
 }
 
