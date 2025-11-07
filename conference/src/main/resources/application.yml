@@ -31,3 +31,6 @@ spring:
     locations: classpath:sql/migration/conf
     baseline-on-migrate: true
     baseline-version: 1
+
+jwt:
+  secret: xAj34kL!92mv@Tqoe5N8y#Kj72DpAqLopCczmnnQQkQ=
