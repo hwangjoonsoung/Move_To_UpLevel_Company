@@ -22,6 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
         String uri = request.getRequestURI();
+        System.out.println("uri = " + uri);
 
         // todo: filter check 없이 통과
         if(uri.startsWith("/auth")){

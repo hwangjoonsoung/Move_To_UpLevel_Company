@@ -1,7 +1,6 @@
-package me.mtuc.conference.institute.user.controller;
+package me.mtuc.conference.institute.login.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.mtuc.conference.institute.user.service.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 

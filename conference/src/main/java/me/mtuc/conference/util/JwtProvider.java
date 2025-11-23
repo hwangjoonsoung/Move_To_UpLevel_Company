@@ -30,11 +30,11 @@ public class JwtProvider {
         return jwtBuilder.compact();
     }
 
-    public String generateRefreshTokenById(String id) {
+    public String generateRefreshTokenById(Long id) {
         Date now = new Date();
         Date expairyDate = new Date(now.getTime() + expirationSecond);
 
-        String subject = "";
+        String subject = id.toString();
         JwtBuilder jwtBuilder = Jwts.builder().setSubject(subject).setIssuedAt(now).setExpiration(expairyDate).signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)));
         return jwtBuilder.compact();
     }
