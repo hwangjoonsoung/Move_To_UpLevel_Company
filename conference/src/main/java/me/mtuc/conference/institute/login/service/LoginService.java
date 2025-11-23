@@ -14,9 +14,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Spliterator;
 import java.util.UUID;
 
 @Service
@@ -28,21 +30,20 @@ public class LoginService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RedisTemplate<String, String> redisTemplate;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public TokenResponse login(LoginDto loginDto) {
-
         // 인증
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
         );
         boolean authenticated = authenticate.isAuthenticated();
-        System.out.println("authenticated = " + authenticated);
         String reflashToken = "";
         String accessToken = "";
         User user = null;
         // 인증성공하면 사용자 정보 가져 오고 reflash토큰 발급
         if (authenticated) {
-            user = userRepository.loginUser(loginDto.getEmail(), loginDto.getPassword()).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다"));
+            user = userRepository.loginUser(loginDto.getEmail(), bCryptPasswordEncoder.encode(loginDto.getPassword())).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다"));
             reflashToken = jwtProvider.generateRefreshTokenById(user.getId());
 
             // todo : 근데 여기서 만료 이전이면 궅이 save나 update를 할 필요가 있을까?

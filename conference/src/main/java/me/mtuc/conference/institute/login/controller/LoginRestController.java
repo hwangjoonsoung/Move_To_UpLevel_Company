@@ -7,10 +7,9 @@ import me.mtuc.conference.institute.login.dto.TokenResponse;
 import me.mtuc.conference.institute.login.service.LoginService;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.nio.channels.Pipe;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,5 +30,6 @@ public class LoginRestController {
         httpServletResponse.setHeader("Set-Cookie", cookie.toString());
         return ResponseEntity.ok(token);
     }
+
 
 }

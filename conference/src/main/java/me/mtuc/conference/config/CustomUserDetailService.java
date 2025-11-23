@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +18,9 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+        System.out.println("CustomUserDetailService.loadUserByUsername");
         User user = userRepository.findUserByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("계정정보를 잘못 입력하셨습니다."));
+        System.out.println("user = " + user);
         org.springframework.security.core.userdetails.User userDetail = new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), List.of());
         return userDetail;
     }
