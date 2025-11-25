@@ -8,8 +8,10 @@ import me.mtuc.conference.institute.login.dto.TokenResponse;
 import me.mtuc.conference.institute.login.repository.LoginRepository;
 import me.mtuc.conference.institute.user.domain.User;
 import me.mtuc.conference.institute.login.dto.LoginDto;
+import me.mtuc.conference.institute.user.dto.CustomUserDetails;
 import me.mtuc.conference.institute.user.repository.UserRepository;
 import me.mtuc.conference.util.JwtProvider;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,10 +36,11 @@ public class LoginService {
 
     public TokenResponse login(LoginDto loginDto) {
         // 인증
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
-        );
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+        Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         boolean authenticated = authenticate.isAuthenticated();
+        CustomUserDetails principal = (CustomUserDetails)authenticate.getPrincipal();
+        System.out.println(principal);
         String reflashToken = "";
         String accessToken = "";
         User user = null;

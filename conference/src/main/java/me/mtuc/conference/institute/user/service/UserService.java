@@ -7,6 +7,8 @@ import me.mtuc.conference.institute.user.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -20,6 +22,7 @@ public class UserService {
                 .affiliations(newUserDto.getAffiliation())
                 .position(newUserDto.getPosition())
                 .phone(newUserDto.getPhone())
+                .email(newUserDto.getEmail())
                 .member_type(newUserDto.getMember_type())
                 .roll(newUserDto.getRoll()).build();
 

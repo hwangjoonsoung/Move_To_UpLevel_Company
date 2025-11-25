@@ -1,10 +1,7 @@
 package me.mtuc.conference.institute.user.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter
@@ -12,6 +9,8 @@ import lombok.ToString;
 @ToString
 @Builder
 @Table(name = "user")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id

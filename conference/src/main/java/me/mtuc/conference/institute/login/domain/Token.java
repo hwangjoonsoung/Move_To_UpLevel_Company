@@ -19,7 +19,7 @@ public class Token {
     @Column(columnDefinition = "int")
     private Long id;
 
-    @Column(name = "refresh_token", length = 100,nullable = false)
+    @Column(name = "refresh_token", length = 200,nullable = false)
     private String refreshToken;
 
     @OneToOne(fetch = FetchType.LAZY)
