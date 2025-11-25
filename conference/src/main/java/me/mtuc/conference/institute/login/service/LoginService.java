@@ -39,18 +39,15 @@ public class LoginService {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         boolean authenticated = authenticate.isAuthenticated();
-        CustomUserDetails principal = (CustomUserDetails)authenticate.getPrincipal();
-        System.out.println(principal);
+        CustomUserDetails userDetails = (CustomUserDetails)authenticate.getPrincipal();
         String reflashToken = "";
         String accessToken = "";
-        User user = null;
         // 인증성공하면 사용자 정보 가져 오고 reflash토큰 발급
         if (authenticated) {
-            user = userRepository.loginUser(loginDto.getEmail(), bCryptPasswordEncoder.encode(loginDto.getPassword())).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다"));
-            reflashToken = jwtProvider.generateRefreshTokenById(user.getId());
+            reflashToken = jwtProvider.generateRefreshTokenById(userDetails.getId());
 
             // todo : 근데 여기서 만료 이전이면 궅이 save나 update를 할 필요가 있을까?
-            Token refreshToken = Token.builder().user(user).refreshToken(reflashToken).dateOfExpired(LocalDateTime.now().plusDays(14)).build();
+            Token refreshToken = Token.builder().userId(userDetails.getId()).refreshToken(reflashToken).dateOfExpired(LocalDateTime.now().plusDays(14)).build();
             loginRepository.save(refreshToken);
 
         }
@@ -59,7 +56,7 @@ public class LoginService {
             accessToken = UUID.randomUUID().toString();
 
             try {
-                redisTemplate.opsForValue().set(createRedisKey(user.getId()), createRedisValue(user, reflashToken));
+                redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(reflashToken));
             } catch (JsonProcessingException e) {
                 // todo: 오류 보내기
             }
@@ -72,7 +69,7 @@ public class LoginService {
         return "user:" + userId;
     }
 
-    public String createRedisValue(User user, String refreshToken) throws JsonProcessingException {
+    public String createRedisValue(String refreshToken) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         String value = objectMapper.writeValueAsString(refreshToken);
         return value;

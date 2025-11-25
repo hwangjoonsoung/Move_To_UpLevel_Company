@@ -20,7 +20,6 @@ public class LoginRestController {
 
     @PostMapping("/user/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse){
-        System.out.println("LoginRestController.login");
         TokenResponse token = loginService.login(loginDto);
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", token.getRefreshToken()).httpOnly(true).secure(true)

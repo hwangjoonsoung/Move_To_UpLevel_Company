@@ -22,9 +22,9 @@ public class Token {
     @Column(name = "refresh_token", length = 200,nullable = false)
     private String refreshToken;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    // 연관관계 생략
+    @Column(name = "user_id",columnDefinition = "int")
+    private Long userId;
 
     private LocalDateTime dateOfExpired ;
 }
