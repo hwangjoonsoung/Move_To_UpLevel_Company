@@ -27,4 +27,6 @@ public class Token {
     private Long userId;
 
     private LocalDateTime dateOfExpired ;
+    @Builder.Default
+    private LocalDateTime dateOfCreate = LocalDateTime.now();
 }

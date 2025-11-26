@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Spliterator;
 import java.util.UUID;
 
@@ -40,31 +41,34 @@ public class LoginService {
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         boolean authenticated = authenticate.isAuthenticated();
         CustomUserDetails userDetails = (CustomUserDetails)authenticate.getPrincipal();
-        String reflashToken = "";
+        String refreshToken = "";
         String accessToken = "";
         // 인증성공하면 사용자 정보 가져 오고 reflash토큰 발급
         if (authenticated) {
-            reflashToken = jwtProvider.generateRefreshTokenById(userDetails.getId());
+            // todo: refresh token DB에 있는지 찾아보고 만료 여부 확인
+            Optional<Object> Token = loginRepository.findTokenByUserId(userDetails.getId());
+            if(Token.isEmpty() || Token.isPresent()){
+                refreshToken = jwtProvider.generateRefreshTokenById(userDetails.getId());
 
-            // todo : 근데 여기서 만료 이전이면 궅이 save나 update를 할 필요가 있을까?
-            Token refreshToken = Token.builder().userId(userDetails.getId()).refreshToken(reflashToken).dateOfExpired(LocalDateTime.now().plusDays(14)).build();
-            loginRepository.save(refreshToken);
-
+                refreshToken = Token.builder().userId(userDetails.getId()).refreshToken(refreshToken).dateOfExpired(LocalDateTime.now().plusDays(14)).build();
+                loginRepository.save(refreshToken);
+            }else{
+                refreshToken = Token.getRefreshToken();
+            }
         }
 
-        if (reflashToken != null && !reflashToken.isBlank()) {
-            // todo: 여기서 refresh token의 만료 여부를 확인하는 과정이 필요
+        if (refreshToken != null && !refreshToken.isBlank()) {
             // todo: 여기서 refresh token의 일치 여부 확인(새로 생성한 token이 아닌경우)
             accessToken = UUID.randomUUID().toString();
 
             try {
-                redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(reflashToken));
+                redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(refreshToken));
             } catch (JsonProcessingException e) {
                 // todo: 오류 보내기
             }
         }
 
-        return TokenResponse.builder().accessToken(accessToken).refreshToken(reflashToken).build();
+        return TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
 
     public String createRedisKey(Long userId) {
