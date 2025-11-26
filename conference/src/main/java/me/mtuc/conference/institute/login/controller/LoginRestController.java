@@ -30,6 +30,4 @@ public class LoginRestController {
         httpServletResponse.setHeader("Set-Cookie", cookie.toString());
         return ResponseEntity.ok(token);
     }
-
-
 }

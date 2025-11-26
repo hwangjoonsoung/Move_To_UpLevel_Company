@@ -390,3 +390,9 @@ public class StaffInfoDto {
 1. application.yml에서 database source를 분리해서 작성
 2. DB에 따라서 package 분리
 3. configuration을 각각 작성하는 것으로 다중 DB연결 환경 구성
+
+## 2025-11-26
+### JWT를 이용한 로그인 구현 과정
+#### 개요 
+- 로그인 구현하면서 로그인 전체 과정이 어떻게 동작하는지, 어떻게 응용을 할 수 있는지 확인한다.
+#### 

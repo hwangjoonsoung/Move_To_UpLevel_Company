@@ -53,6 +53,8 @@ public class LoginService {
         }
 
         if (reflashToken != null && !reflashToken.isBlank()) {
+            // todo: 여기서 refresh token의 만료 여부를 확인하는 과정이 필요
+            // todo: 여기서 refresh token의 일치 여부 확인(새로 생성한 token이 아닌경우)
             accessToken = UUID.randomUUID().toString();
 
             try {
