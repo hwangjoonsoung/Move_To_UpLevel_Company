@@ -61,6 +61,7 @@ public class LoginService {
 
             try {
                 Duration duration = Duration.ofMinutes(60);
+                // todo: json형태로 저장해서 사용할 수 있도록 변경
                 redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(accessToken),duration);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException("JsonProcessingException");
