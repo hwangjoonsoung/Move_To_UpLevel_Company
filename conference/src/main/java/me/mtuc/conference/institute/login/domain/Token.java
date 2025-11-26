@@ -3,11 +3,13 @@ package me.mtuc.conference.institute.login.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.mtuc.conference.institute.user.domain.User;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Entity
 @AllArgsConstructor
 @Builder

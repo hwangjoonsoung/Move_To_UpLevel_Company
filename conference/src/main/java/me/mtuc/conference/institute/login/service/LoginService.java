@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Spliterator;
@@ -45,26 +46,24 @@ public class LoginService {
         String accessToken = "";
         // 인증성공하면 사용자 정보 가져 오고 reflash토큰 발급
         if (authenticated) {
-            // todo: refresh token DB에 있는지 찾아보고 만료 여부 확인
-            Optional<Object> Token = loginRepository.findTokenByUserId(userDetails.getId());
-            if(Token.isEmpty() || Token.isPresent()){
-                refreshToken = jwtProvider.generateRefreshTokenById(userDetails.getId());
-
-                refreshToken = Token.builder().userId(userDetails.getId()).refreshToken(refreshToken).dateOfExpired(LocalDateTime.now().plusDays(14)).build();
-                loginRepository.save(refreshToken);
+            Optional<Token> token = loginRepository.findTokenByUserId(userDetails.getId());
+            if(token.isPresent() && isExpiredRefreshToken(token.get())){
+                refreshToken = token.get().getRefreshToken();
             }else{
-                refreshToken = Token.getRefreshToken();
+                refreshToken = jwtProvider.generateRefreshTokenById(userDetails.getId());
+                Token newRefreshToken = Token.builder().userId(userDetails.getId()).refreshToken(refreshToken).dateOfExpired(LocalDateTime.now().plusDays(14)).build();
+                loginRepository.save(newRefreshToken);
             }
         }
 
         if (refreshToken != null && !refreshToken.isBlank()) {
-            // todo: 여기서 refresh token의 일치 여부 확인(새로 생성한 token이 아닌경우)
             accessToken = UUID.randomUUID().toString();
 
             try {
-                redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(refreshToken));
+                Duration duration = Duration.ofMinutes(60);
+                redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(accessToken),duration);
             } catch (JsonProcessingException e) {
-                // todo: 오류 보내기
+                throw new RuntimeException("JsonProcessingException");
             }
         }
 
@@ -79,5 +78,11 @@ public class LoginService {
         ObjectMapper objectMapper = new ObjectMapper();
         String value = objectMapper.writeValueAsString(refreshToken);
         return value;
+    }
+
+    public boolean isExpiredRefreshToken(Token token) {
+        LocalDateTime dateOfExpired = token.getDateOfExpired();
+        LocalDateTime now = LocalDateTime.now();
+        return dateOfExpired.isAfter(now);
     }
 }
