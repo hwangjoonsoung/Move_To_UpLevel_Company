@@ -19,8 +19,8 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(userEmail).orElseThrow(() -> new IllegalArgumentException("계정정보를 잘못 입력하셨습니다."));
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        User user = userRepository.findById(Long.parseLong(id)).orElseThrow(() -> new IllegalArgumentException("계정정보를 잘못 입력하셨습니다."));
 
         CustomUserDetails userDetail = CustomUserDetails.builder()
                 .email(user.getEmail())

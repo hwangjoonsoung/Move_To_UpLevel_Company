@@ -7,9 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.config.CustomUserDetailService;
 import me.mtuc.conference.util.JwtProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.reactive.TransactionalOperatorExtensionsKt;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -33,18 +34,22 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if(token != null && jwtProvider.validateToken(token)){
-            String subject = jwtProvider.getSubjetFromToken(token);
-            UserDetails userDetails = customUserDetailService.loadUserByUsername(subject);
-            System.out.println(userDetails);
+            String userId = jwtProvider.getSubjetFromToken(token);// user pk
+            UserDetails userDetails = customUserDetailService.loadUserByUsername(userId);
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
         filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request){
-        String authorization = request.getHeader("Authorization");
+        String refreshToken = request.getHeader("Cookie");
         String result = "";
-        if (authorization != null){
-            result = authorization.startsWith("Bearer ") ? authorization.substring(7) : "";
+        if (refreshToken != null){
+            result = refreshToken.startsWith("Bearer ") ? refreshToken.substring(7) : refreshToken;
+        }
+        if(refreshToken.startsWith("refresh")){
+            result = result.replace("refreshToken=","");
         }
         return result;
     }

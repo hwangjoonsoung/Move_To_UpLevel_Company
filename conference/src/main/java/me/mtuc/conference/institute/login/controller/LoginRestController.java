@@ -3,6 +3,7 @@ package me.mtuc.conference.institute.login.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.institute.login.dto.LoginDto;
+import me.mtuc.conference.institute.login.dto.AuthenticationToken;
 import me.mtuc.conference.institute.login.dto.TokenResponse;
 import me.mtuc.conference.institute.login.service.LoginService;
 import org.springframework.http.ResponseCookie;
@@ -20,14 +21,15 @@ public class LoginRestController {
 
     @PostMapping("/user/login")
     public ResponseEntity<TokenResponse> login(@RequestBody LoginDto loginDto, HttpServletResponse httpServletResponse){
-        TokenResponse token = loginService.login(loginDto);
+        AuthenticationToken authenticationToken = loginService.login(loginDto);
 
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", token.getRefreshToken()).httpOnly(true).secure(true)
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", authenticationToken.getRefreshToken()).httpOnly(true).secure(true)
                 .path("/")
                 .sameSite("none")
                 .maxAge(60 * 60 * 24)
                 .build();
         httpServletResponse.setHeader("Set-Cookie", cookie.toString());
-        return ResponseEntity.ok(token);
+        TokenResponse accessTokenResponse = new TokenResponse(authenticationToken.getAccessToken());
+        return ResponseEntity.ok().body(accessTokenResponse);
     }
 }

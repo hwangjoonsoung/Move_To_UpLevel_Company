@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import me.mtuc.conference.institute.login.domain.Token;
-import me.mtuc.conference.institute.login.dto.TokenResponse;
+import me.mtuc.conference.institute.login.dto.AuthenticationToken;
 import me.mtuc.conference.institute.login.repository.LoginRepository;
 import me.mtuc.conference.institute.user.domain.User;
 import me.mtuc.conference.institute.login.dto.LoginDto;
@@ -36,14 +36,16 @@ public class LoginService {
     private final RedisTemplate<String, String> redisTemplate;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public TokenResponse login(LoginDto loginDto) {
+    public AuthenticationToken login(LoginDto loginDto) {
         // 인증
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         boolean authenticated = authenticate.isAuthenticated();
+
         CustomUserDetails userDetails = (CustomUserDetails)authenticate.getPrincipal();
         String refreshToken = "";
         String accessToken = "";
+
         // 인증성공하면 사용자 정보 가져 오고 reflash토큰 발급
         if (authenticated) {
             Optional<Token> token = loginRepository.findTokenByUserId(userDetails.getId());
@@ -61,14 +63,13 @@ public class LoginService {
 
             try {
                 Duration duration = Duration.ofMinutes(60);
-                // todo: json형태로 저장해서 사용할 수 있도록 변경
                 redisTemplate.opsForValue().set(createRedisKey(userDetails.getId()), createRedisValue(accessToken),duration);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException("JsonProcessingException");
             }
         }
 
-        return TokenResponse.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+        return AuthenticationToken.builder().accessToken(accessToken).refreshToken(refreshToken).build();
     }
 
     public String createRedisKey(Long userId) {

@@ -33,7 +33,6 @@ public class JwtProvider {
     public String generateRefreshTokenById(Long id) {
         Date now = new Date();
         Date expairyDate = new Date(now.getTime() + expirationSecond);
-
         String subject = id.toString();
         JwtBuilder jwtBuilder = Jwts.builder().setSubject(subject).setIssuedAt(now).setExpiration(expairyDate).signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)));
         return jwtBuilder.compact();
@@ -51,13 +50,8 @@ public class JwtProvider {
             String subject = this.getSubjetFromToken(token);
             Util util = new Util(new ObjectMapper());
 
-            // todo: token valid확인하는 과정이 필요함
-            // todo: test위해서 valid true
             JsonNode jsonNode = util.stringToJson(subject);
-
-            if(true){
-                return true;
-            }
+            System.out.println("jsonNode = " + jsonNode);
         } catch (ExpiredJwtException e){
             return false;
         } catch (SignatureException e){
