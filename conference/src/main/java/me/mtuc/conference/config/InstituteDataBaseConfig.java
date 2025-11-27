@@ -36,7 +36,7 @@ public class InstituteDataBaseConfig {
     ) {
         return entityManagerFactoryBuilder.dataSource(DataSourceBuilder)
                 .packages("me.mtuc.conference.institute")
-                .persistenceUnit("institute").build();
+                .persistenceUnit("db-institute").build();
     }
 
     @Bean(name = "instituteTransactionManager")

@@ -22,12 +22,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
-        show_sql: true
+        show_sql: false
     defer-datasource-initialization: false
-    
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
   flyway:
     enabled: true
   flyway.db-conf:
     locations: classpath:sql/migration/conf
     baseline-on-migrate: true
     baseline-version: 1
+
+jwt:
+  secret: xAj34kL!92mv@Tqoe5N8y#Kj72DpAqLopCczmnnQQkQ=
