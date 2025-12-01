@@ -39,8 +39,10 @@ public class LoginService {
     public AuthenticationToken login(LoginDto loginDto) {
         // 인증
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+        System.out.println(usernamePasswordAuthenticationToken);
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         boolean authenticated = authenticate.isAuthenticated();
+        System.out.println(authenticated);
 
         CustomUserDetails userDetails = (CustomUserDetails)authenticate.getPrincipal();
         String refreshToken = "";

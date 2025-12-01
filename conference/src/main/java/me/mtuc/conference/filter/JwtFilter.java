@@ -28,14 +28,14 @@ public class JwtFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
 
         // todo: filter check 없이 통과
-        if(uri.startsWith("/auth")){
+        if(uri.startsWith("/auth") || uri.startsWith("/user")){
             filterChain.doFilter(request, response);
             return;
         }
 
         if(token != null && jwtProvider.validateToken(token)){
             String userId = jwtProvider.getSubjetFromToken(token);// user pk
-            UserDetails userDetails = customUserDetailService.loadUserByUsername(userId);
+            UserDetails userDetails = customUserDetailService.loadUserById(Long.parseLong(userId));
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         }
@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (refreshToken != null){
             result = refreshToken.startsWith("Bearer ") ? refreshToken.substring(7) : refreshToken;
         }
-        if(refreshToken.startsWith("refresh")){
+        if(refreshToken != null && refreshToken.startsWith("refresh")){
             result = result.replace("refreshToken=","");
         }
         return result;
